@@ -1,0 +1,15 @@
+
+* {
+    font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+button {
+    padding: 5px 10px;
+    margin: 0 5px;
+}
+input {
+    padding: 5px 10px;
+}

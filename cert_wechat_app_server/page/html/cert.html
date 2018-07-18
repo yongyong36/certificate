@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>cert.html</title>
+  <link rel="stylesheet" href="../css/common.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="../js/vue-resource.min.js"></script>
+  <script type="text/javascript" src="../js/web_common.js"></script>
+  <script src="../js/cert.js"></script>
+
+</head>
+<body id="app">
+
+  <ul>
+    <li v-for="cert in certList">
+      {{cert.id}}
+    </li>
+  </ul>
+  <br>
+  <br>
+
+  <button onclick="sendTransaction()">sendTransaction</button>
+  <button onclick="getBlock()">getBlock</button>
+  <button onclick="filterFunc()">filterFunc</button>
+  <button onclick="stopWatching()">stopWatching</button>
+  <br>
+  <br>
+
+
+  <div>
+    <h1>no from node</h1>
+    <button onclick="getAccounts()">获取账号</button>
+    <button onclick="newAccount()">创建账号</button>
+    <button onclick="unlockAccount()">解锁账号</button>
+    <br>
+    <br>
+
+    <input type="text" name="msg" id="msg" value="form web3.js api">
+    <button onclick="setMsg()">setMsg</button>
+    <button onclick="getMsg()">getMsg</button>
+  </div>
+  <br>
+  <br>
+
+
+  <div>
+    <h1>from node</h1>
+    <button onclick="getPastLogs()">getPastLogs</button>
+
+    <br>
+    <br>
+
+    <input type="text" name="msgNode" id="msgNode" value="from node">
+    <button onclick="setMsgNode()">setMsgNode</button>
+    <button onclick="getMsgNode()">getMsgNode</button>
+
+  </div>
+  <br>
+
+
+
+</body>
+</html>

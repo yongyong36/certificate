@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>web3</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+          content="width=device-width,height=device-height, initial-scale=1.0, shrink-to-fit=no ,maximum-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="../css/common.css">
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script> -->
+    <script type="text/javascript" src="../js/web3.js"></script>
+    <script type="text/javascript" src="../js/web_common.js"></script>
+    <script type="text/javascript" src="../js/index.js"></script>
+
+</head>
+<body>
+
+    <button onclick="sendTransaction()">sendTransaction</button>
+    <button onclick="getBlock()">getBlock</button>
+    <button onclick="filterFunc()">filterFunc</button>
+    <button onclick="stopWatching()">stopWatching</button>
+    <br>
+    <br>
+
+
+
+    <div>
+        <h1>no from node</h1>
+        <button onclick="getAccounts()">获取账号</button>
+        <button onclick="newAccount()">创建账号</button>
+        <button onclick="unlockAccount()">解锁账号</button>
+        <br>
+        <br>
+
+        <input type="text" name="msg" id="msg" value="form web3.js api">
+        <button onclick="setMsg()">setMsg</button>
+        <button onclick="getMsg()">getMsg</button>
+    </div>
+    <br>
+    <br>
+
+
+    <div>
+        <h1>from node</h1>
+        <button onclick="getPastLogs()">getPastLogs</button>
+
+        <br>
+        <br>
+
+        <input type="text" name="msgNode" id="msgNode" value="from node">
+        <button onclick="setMsgNode()">setMsgNode</button>
+        <button onclick="getMsgNode()">getMsgNode</button>
+
+    </div>
+    <br>
+
+</body>
+</html>

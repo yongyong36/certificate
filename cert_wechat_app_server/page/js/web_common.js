@@ -15,23 +15,19 @@ let balance = web3.eth.getBalance(coinbase);
 // console.log(ethAbi, web3);
 // console.log(coinbase);
 
-let abi=[
+let abi = [
     {
-        "constant": false,
-        "inputs": [
+        "constant": true,
+        "inputs": [],
+        "name": "getCert",
+        "outputs": [
             {
-                "name": "_certName",
-                "type": "string"
-            },
-            {
-                "name": "_certMeaning",
-                "type": "string"
+                "name": "",
+                "type": "string[]"
             }
         ],
-        "name": "addCert",
-        "outputs": [],
         "payable": false,
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -60,20 +56,6 @@ let abi=[
         "constant": false,
         "inputs": [
             {
-                "name": "_msg",
-                "type": "string"
-            }
-        ],
-        "name": "setMsg",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
                 "name": "_msg1",
                 "type": "string"
             },
@@ -90,20 +72,6 @@ let abi=[
     },
     {
         "constant": true,
-        "inputs": [],
-        "name": "getCert",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
         "inputs": [
             {
                 "name": "_invitedId",
@@ -111,25 +79,6 @@ let abi=[
             }
         ],
         "name": "getCertBindByInvited",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "_inviterId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getCertBindByInviter",
         "outputs": [
             {
                 "name": "",
@@ -155,6 +104,38 @@ let abi=[
         "type": "function"
     },
     {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_certName",
+                "type": "string"
+            },
+            {
+                "name": "_certMeaning",
+                "type": "string"
+            }
+        ],
+        "name": "addCert",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_msg",
+                "type": "string"
+            }
+        ],
+        "name": "setMsg",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "constant": true,
         "inputs": [],
         "name": "getMsgArr",
@@ -167,9 +148,29 @@ let abi=[
         "payable": false,
         "stateMutability": "view",
         "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_inviterId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCertBindByInviter",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
     }
 ];
-let contractAddress = "0xf2b591a4b2f339a957d0a153a59cb8f7a5e6388e";		// 合约地址
+
+let contractAddress = "0xc6e3073b2244e7865de868893482d8063da8e0e7";		// 合约地址
 let myContract = web3.eth.contract(abi);
 let myContractInstance = myContract.at(contractAddress);
 
@@ -178,12 +179,12 @@ let blockHash;
 
 
 function sendTransaction() {
+    let msgValue = msg.value;
     unlockAccount().then(function(data) {
-        
         web3.eth.sendTransaction({
             from: coinbase,
             to: contractAddress,
-            value: '1000000'
+            value: '1000000',
         }, function(err, transactionHash) {
             console.log('sendTransaction', err, transactionHash);
         });

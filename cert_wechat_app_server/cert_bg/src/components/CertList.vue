@@ -11,14 +11,14 @@
       <input type="text" name="certMeaning" id="cert_meaning" value="傻证" v-model="certMeaning"><br>
 
       <label></label>
-      <button @click="addCertCont()">addCert</button>
+      <button @click="addCert()">addCert</button>
       <br>
       <br>
 
       <label for="cert_meaning">cert_meaning</label>
       <input type="text" name="certId" id="cert_id" value="1" v-model="certId"><br>
       <label></label>
-      <button @click="getCertCont()">getCert</button>
+      <button @click="getCert()">getCert</button>
 
     </div>
     <br>
@@ -208,11 +208,13 @@
       "type": "function"
     }
   ];
-  let contractAddress = "0x42a5da3736dfbfee53412bb12cb5d8a6293be003";		// 合约地址
+  let contractAddress = "0xc6e3073b2244e7865de868893482d8063da8e0e7";		// 合约地址
   let myContract = web3.eth.contract(abi);
   let myContractInstance = myContract.at(contractAddress);
   let options = {
     from: coinbase,
+    gas: 200000,
+    // gasPrice: 3800000000000,
   };
 
   let blockNumber = web3.eth.blockNumber;
@@ -244,10 +246,7 @@
     });
     return promise;
   }
-
-
-
-
+  
 
   import Vue from 'vue';
 
@@ -272,7 +271,7 @@
             console.log(err);
           })
       },
-      addCertCont: function() {
+      addCert: function() {
         console.log(this.certName, this.certMeaning);
         let data = {
           certName: this.certName,
@@ -288,15 +287,23 @@
         //     console.log(err);
         //   })
         unlockAccount().then(function () {
-          myContractInstance.addCert([data.certName, data.certMeaning], options, function(error,result) {
+          console.log('unlock true', myContractInstance);
+          myContractInstance.addCert(data.certName, data.certMeaning, options, function(error,result) {
             console.log(error,result);
           });
+
+          // myContractInstance.addCert.sendTransaction(data.certName, data.certMeaning, options, function(error,result) {
+          //   console.log(error,result);
+          // });
         })
       },
-      getCertCont: function() {
+      getCert: function() {
         let data = {
           certId: this.certId,
         };
+        myContractInstance.getCert(options, function(error,result) {
+          console.log(error,result);
+        });
         // Vue.http.get('http://127.0.0.1:3000/getCert', data)
         //   .then((resp) => {
         //     console.log(resp.data);

@@ -5,7 +5,7 @@ function setMsg() {
     };
 	let msgValue = msg.value;
 	unlockAccount().then(function(data) {
-		myContractInstance.setMsg(msgValue,msgValue, options, function(error,result) {
+		myContractInstance.setMsg(msgValue, options, function(error,result) {
 			console.log(error,result);
 		});
 	});
@@ -13,6 +13,24 @@ function setMsg() {
 
 function getMsg() {
 	let result = myContractInstance.getMsg();
+	console.log(result);
+}
+
+
+function setMsgArr() {
+    let options = {
+        from: coinbase,
+    };
+	let msgValue = msgArr.value;
+	unlockAccount().then(function(data) {
+		myContractInstance.setMsgArr(msgValue, msgValue, options, function(error,result) {
+			console.log(error,result);
+		});
+	});
+}
+
+function getMsgArr() {
+	let result = myContractInstance.getMsgArr();
 	console.log(result);
 }
 

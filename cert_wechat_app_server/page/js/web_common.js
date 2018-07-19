@@ -17,21 +17,127 @@ let balance = web3.eth.getBalance(coinbase);
 
 let abi=[
     {
-        "constant": false,  // true说明方法不会修改合约的状态变量
+        "constant": false,
         "inputs": [
             {
-                "name": "_msg",
+                "name": "_certName",
                 "type": "string"
             },
             {
-                "name": "_msg2",
+                "name": "_certMeaning",
+                "type": "string"
+            }
+        ],
+        "name": "addCert",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_certId",
+                "type": "uint256"
+            },
+            {
+                "name": "_inviterId",
+                "type": "uint256"
+            },
+            {
+                "name": "_invitedId",
+                "type": "uint256"
+            }
+        ],
+        "name": "addCertBind",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_msg",
                 "type": "string"
             }
         ],
         "name": "setMsg",
         "outputs": [],
-        "payable": false,   // 是否可以接受ether
+        "payable": false,
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_msg1",
+                "type": "string"
+            },
+            {
+                "name": "_msge2",
+                "type": "string"
+            }
+        ],
+        "name": "setMsgArr",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getCert",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_invitedId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCertBindByInvited",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_inviterId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCertBindByInviter",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -41,16 +147,29 @@ let abi=[
         "outputs": [
             {
                 "name": "",
-                "type": "string[]",
-                "indexed": true,
-            },
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getMsgArr",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string[]"
+            }
         ],
         "payable": false,
         "stateMutability": "view",
         "type": "function"
     }
 ];
-let contractAddress = "0xf7238b0fc74519b7685a770007e294b0dfc6da99";		// 合约地址
+let contractAddress = "0xf2b591a4b2f339a957d0a153a59cb8f7a5e6388e";		// 合约地址
 let myContract = web3.eth.contract(abi);
 let myContractInstance = myContract.at(contractAddress);
 

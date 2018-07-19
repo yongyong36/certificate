@@ -65,7 +65,7 @@
         {
           "name": "_certMeaning",
           "type": "string"
-        },
+        }
       ],
       "name": "addCert",
       "outputs": [],
@@ -74,25 +74,19 @@
       "type": "function"
     },
     {
-      "constant": true,
-      "inputs": [],
-      "name": "getCert",
-      "outputs": [
-        {
-          "name": "",
-          "type": "Cert"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "constant": false,
       "inputs": [
         {
-          "name": "_msg",
-          "type": "string"
+          "name": "_certId",
+          "type": "uint256"
+        },
+        {
+          "name": "_inviterId",
+          "type": "uint256"
+        },
+        {
+          "name": "_invitedId",
+          "type": "uint256"
         }
       ],
       "name": "addCertBind",
@@ -109,39 +103,80 @@
           "type": "string"
         }
       ],
-      "name": "getCertBindByInviter",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_msg",
-          "type": "string"
-        }
-      ],
-      "name": "getCertBindByInvited",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_msg",
-          "type": "string"
-        }
-      ],
       "name": "setMsg",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_msg1",
+          "type": "string"
+        },
+        {
+          "name": "_msge2",
+          "type": "string"
+        }
+      ],
+      "name": "setMsgArr",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getCert",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_invitedId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCertBindByInvited",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_inviterId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCertBindByInviter",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -157,9 +192,23 @@
       "payable": false,
       "stateMutability": "view",
       "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getMsgArr",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     }
   ];
-  let contractAddress = "0xf7238b0fc74519b7685a770007e294b0dfc6da99";		// 合约地址
+  let contractAddress = "0x42a5da3736dfbfee53412bb12cb5d8a6293be003";		// 合约地址
   let myContract = web3.eth.contract(abi);
   let myContractInstance = myContract.at(contractAddress);
   let options = {

@@ -17,17 +17,21 @@ let balance = web3.eth.getBalance(coinbase);
 
 let abi = [
     {
-        "constant": true,
-        "inputs": [],
-        "name": "getCert",
-        "outputs": [
+        "constant": false,
+        "inputs": [
             {
-                "name": "",
-                "type": "string[]"
+                "name": "_certName",
+                "type": "string"
+            },
+            {
+                "name": "_certMeaning",
+                "type": "string"
             }
         ],
+        "name": "addCert",
+        "outputs": [],
         "payable": false,
-        "stateMutability": "view",
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -47,6 +51,20 @@ let abi = [
             }
         ],
         "name": "addCertBind",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_msg",
+                "type": "string"
+            }
+        ],
+        "name": "setMsg",
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
@@ -91,66 +109,6 @@ let abi = [
     },
     {
         "constant": true,
-        "inputs": [],
-        "name": "getMsg",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_certName",
-                "type": "string"
-            },
-            {
-                "name": "_certMeaning",
-                "type": "string"
-            }
-        ],
-        "name": "addCert",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_msg",
-                "type": "string"
-            }
-        ],
-        "name": "setMsg",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getMsgArr",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
         "inputs": [
             {
                 "name": "_inviterId",
@@ -167,10 +125,66 @@ let abi = [
         "payable": false,
         "stateMutability": "view",
         "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getCertIdList",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getCertNameList",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getMsg",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getMsgArr",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
     }
 ];
 
-let contractAddress = "0x5aed1b7059acdda8df8b0582aebdefa016c0d253";		// 合约地址
+let contractAddress = "0x46a902022bbb724e1ec5d6917ce7d694cba8b05d";		// 合约地址
 let myContract = web3.eth.contract(abi);
 let myContractInstance = myContract.at(contractAddress);
 

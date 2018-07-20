@@ -4,6 +4,7 @@
       <!-- Cert Form -->
       <h1>Cert Form</h1>
 
+      <h3>set cert</h3>
       <label for="cert_name">cert_name</label>
       <input type="text" name="certName" id="cert_name" value="silly" v-model="certName"><br>
 
@@ -15,10 +16,11 @@
       <br>
       <br>
 
-      <label for="cert_meaning">cert_meaning</label>
-      <input type="text" name="certId" id="cert_id" value="1" v-model="certId"><br>
-      <label></label>
-      <button @click="getCert()">getCert</button>
+      <!--<h3>get cert</h3>-->
+      <!--<label for="cert_meaning">cert_meaning</label>-->
+      <!--<input type="text" name="certId" id="cert_id" value="1" v-model="certId"><br>-->
+      <!--<label></label>-->
+      <!--<button @click="getCert()">getCert</button>-->
 
     </div>
     <br>
@@ -34,9 +36,11 @@
     <!-- Cert List -->
     <hr>
     <h1>Cert List</h1>
+    <!--<button @click="getCertIdList()">getCertList</button>-->
+    <!--<button @click="getCertNameList()">getCertList</button>-->
     <ul>
       <li v-for="cert in certList">
-        {{cert.name}}
+        {{cert}}
       </li>
     </ul>
 
@@ -53,7 +57,7 @@
   // console.log(ethAbi, web3);
   // console.log(coinbase);
 
-  let abi=[
+  let abi = [
     {
       "constant": false,
       "inputs": [
@@ -128,20 +132,6 @@
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "getCert",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string[]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
       "inputs": [
         {
           "name": "_invitedId",
@@ -181,6 +171,34 @@
     {
       "constant": true,
       "inputs": [],
+      "name": "getCertIdList",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getCertNameList",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
       "name": "getMsg",
       "outputs": [
         {
@@ -207,12 +225,12 @@
       "type": "function"
     }
   ];
-  let contractAddress = "0x5aed1b7059acdda8df8b0582aebdefa016c0d253";		// 合约地址
+  let contractAddress = "0x46a902022bbb724e1ec5d6917ce7d694cba8b05d";		// 合约地址
   let myContract = web3.eth.contract(abi);
   let myContractInstance = myContract.at(contractAddress);
   let options = {
     from: coinbase,
-    gas: 200000,
+    gas: 300000,
     // gasPrice: 3800000000000,
   };
 
@@ -254,6 +272,8 @@
     data () {
       return {
         certList: [],
+        certIdList: [],
+        certNameList: [],
         certName: 'aaaaa',
         certMeaning: 'aaaaaa',
         certId: 1,
@@ -261,14 +281,46 @@
     },
     http: { headers: {'Content-Type': 'application/x-www-form-urlencoded'} },
     methods: {
-      getCertList: function() {
-        Vue.http.get('http://127.0.0.1:3000/getCertList')
+      setDataCertList: function() {
+        let _this = this;
+        if (this.certIdList.length > 0 && this.certNameList.length > 0) {
+          this.certIdList.forEach(function (item, index) {
+            _this.certList.push({certId: item, certName: _this.certNameList[index]});
+          });
+        }
+        console.log(this.certList);
+      },
+      getCertIdList: function() {
+        myContractInstance.getCertIdList(options, function(error,result) {
+          console.log(error,result);
+        });
+        /*Vue.http.get('http://127.0.0.1:3000/getCertIdList')
           .then((resp) => {
-            console.log(resp.data);
-            this.certList = resp.data;
+            if (resp.data.length > 1) {
+              resp.data.shift();
+            }
+            this.certIdList = resp.data;
+            this.setDataCertList();
+            console.log(this.certIdList);
           },(err) => {
             console.log(err);
-          })
+          })*/
+      },
+      getCertNameList: function() {
+        myContractInstance.getCertNameList(options, function(error,result) {
+          console.log(error,result);
+        });/*
+        Vue.http.get('http://127.0.0.1:3000/getCertNameList')
+          .then((resp) => {
+            if (resp.data.length > 1) {
+              resp.data.shift();
+            }
+            this.certNameList = resp.data;
+            this.setDataCertList();
+            console.log(this.certNameList);
+          },(err) => {
+            console.log(err);
+          })*/
       },
       addCert: function() {
         console.log(this.certName, this.certMeaning);
@@ -298,9 +350,10 @@
       },
       getCert: function() {
         let data = {
+          // certId: parseInt(this.certId),
           certId: this.certId,
         };
-        myContractInstance.getCert(options, function(error,result) {
+        myContractInstance.getCert(0, options, function(error,result) {
           console.log(error,result);
         });
         // Vue.http.get('http://127.0.0.1:3000/getCert', data)
@@ -309,7 +362,7 @@
         //     this.certList = resp.data;
         //   },(err) => {
         //     console.log(err);
-        //   })
+        //   });
       },
       getPastLogs: function() {
         Vue.http.get('http://127.0.0.1:3000/getPastLogs')
@@ -318,10 +371,23 @@
           },(err) => {
             console.log(err);
           })
-      }
+      },
+
+
+
     },
     created: function() {
-      this.getCertList();
+      this.getCertIdList();
+      this.getCertNameList();
+    },
+    watch: {
+      certIdList: function (val) {
+        console.log(val);
+      },
+      certNameList: function (val) {
+        console.log(val);
+
+      },
     }
   }
 </script>

@@ -46,6 +46,8 @@
 <script>
   import contractAddress from '../../../contract_address'
 
+  console.log(contractAddress);
+
   let web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
   // let web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.2.68:8545"));
   // let web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.2.53:4444"));

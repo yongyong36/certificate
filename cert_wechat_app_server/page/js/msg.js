@@ -47,7 +47,10 @@ function setMsgNode() {
 		url:"http://127.0.0.1:3000/setMessage",/*url写异域的请求地址*/
 		success: function(data){
 			console.log(data);
-		}
+		},
+		error: function(err){
+            console.log(err);
+        }
 	});
 }
 

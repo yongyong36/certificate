@@ -232,22 +232,22 @@ app.get("/getPastLogs",function(req,resp){
 
 /* region certificate api */
 // certificate
-let certList = [
-    {id: 1, type: 'merry', name: '结婚证', couple: true},
-    {id: 2, type: 'lovers', name: '情侣证', couple: true},
-    {id: 3, type: 'single', name: '狗牌', couple: false},
-    {id: 4, type: 'passerby', name: '路人证', couple: true},
-    {id: 5, type: 'bestie', name: '闺蜜证', couple: true},
-    {id: 6, type: 'bestFriends', name: '死党证', couple: true},
-    {id: 7, type: 'queen', name: '喵星女王', couple: false},
-    {id: 8, type: 'prince', name: '小王子', couple: false},
-];
+// let certList = [
+//     {id: 1, type: 'merry', name: '结婚证', couple: true},
+//     {id: 2, type: 'lovers', name: '情侣证', couple: true},
+//     {id: 3, type: 'single', name: '狗牌', couple: false},
+//     {id: 4, type: 'passerby', name: '路人证', couple: true},
+//     {id: 5, type: 'bestie', name: '闺蜜证', couple: true},
+//     {id: 6, type: 'bestFriends', name: '死党证', couple: true},
+//     {id: 7, type: 'queen', name: '喵星女王', couple: false},
+//     {id: 8, type: 'prince', name: '小王子', couple: false},
+// ];
 
 app.get("/getCertList",function(req,resp){
-    resp.send(certList);
-    // contract.methods.getCert().call(function(error,result){
-    //     resp.send(result);
-    // });
+    // resp.send(certList);
+    contract.methods.getCert().call(function(error,result){
+        resp.send(result);
+    });
 });
 app.post("/addCert",function(req,resp){
     console.log(req.body);
@@ -261,7 +261,7 @@ app.post("/addCert",function(req,resp){
 });
 app.get("/getCert",function(req,resp){
     console.log(req.body);
-    contract.methods.getCert(req.body.id).call(function(error,result){
+    contract.methods.getCert().call(function(error,result){
         resp.send(result);
     });
 });

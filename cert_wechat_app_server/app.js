@@ -3,7 +3,6 @@ let bodyParser = require('body-parser');
 // let qs = require('querystring');
 let Web3 = require('web3');     //引入web3.js
 // let Eth = require('web3-eth');
-let contractAddress = require('./contract_address')
 
 let app = express();
 // app.configure(function () {
@@ -196,7 +195,7 @@ let abi = [
     }
 ];
 
-// let contractAddress = "0xc6e3073b2244e7865de868893482d8063da8e0e7";	    // 合约地址
+let contractAddress = "0x5aed1b7059acdda8df8b0582aebdefa016c0d253";	    // 合约地址
 let contract = new web3.eth.Contract(abi,contractAddress);   //调用web3 去获取到合约的对象
 
 // let eth = new Eth(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));

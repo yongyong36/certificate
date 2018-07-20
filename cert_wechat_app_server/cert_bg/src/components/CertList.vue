@@ -44,10 +44,6 @@
 </template>
 
 <script>
-  import contractAddress from '../../../contract_address'
-
-  console.log(contractAddress);
-
   let web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
   // let web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.2.68:8545"));
   // let web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.2.53:4444"));
@@ -211,7 +207,7 @@
       "type": "function"
     }
   ];
-  // let contractAddress = "0xc6e3073b2244e7865de868893482d8063da8e0e7";		// 合约地址
+  let contractAddress = "0x5aed1b7059acdda8df8b0582aebdefa016c0d253";		// 合约地址
   let myContract = web3.eth.contract(abi);
   let myContractInstance = myContract.at(contractAddress);
   let options = {

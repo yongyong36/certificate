@@ -5,14 +5,14 @@ function setMsg() {
     };
 	let msgValue = msg.value;
 	unlockAccount().then(function(data) {
-		myContractInstance.setMsg(msgValue, options, function(error,result) {
+		certContract.setMsg(msgValue, options, function(error,result) {
 			console.log(error,result);
 		});
 	});
 }
 
 function getMsg() {
-	let result = myContractInstance.getMsg();
+	let result = certContract.getMsg();
 	console.log(result);
 }
 
@@ -23,14 +23,14 @@ function setMsgArr() {
     };
 	let msgValue = msgArr.value;
 	unlockAccount().then(function(data) {
-		myContractInstance.setMsgArr(msgValue, msgValue, options, function(error,result) {
+		certContract.setMsgArr(msgValue, msgValue, options, function(error,result) {
 			console.log(error,result);
 		});
 	});
 }
 
 function getMsgArr() {
-	let result = myContractInstance.getMsgArr();
+	let result = certContract.getMsgArr();
 	console.log(result);
 }
 

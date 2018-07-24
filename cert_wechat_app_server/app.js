@@ -40,6 +40,19 @@ app.get('/msg', function(req, res){
 // let web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.2.53:4444"));
 let web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 
+let fromAddress = "0xb247e2b628caa0e34cbd27f84bffd4ebe8158f99";
+/*
+let fromAddress;
+web3.eth.getCoinbase()
+    .then(function(coinbase) {
+        fromAddress = coinbase;
+        console.log(fromAddress);
+    });
+*/
+let options = {
+    from: fromAddress,
+};
+
 let abi = [
     {
         "constant": false,
@@ -112,6 +125,12 @@ let abi = [
         "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
+    },
+    {
+        "inputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
     },
     {
         "constant": true,
@@ -206,25 +225,29 @@ let abi = [
         "payable": false,
         "stateMutability": "view",
         "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "minter",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
     }
 ];
 
-let contractAddress = "0x46a902022bbb724e1ec5d6917ce7d694cba8b05d";	    // 合约地址
-let contract = new web3.eth.Contract(abi,contractAddress);   //调用web3 去获取到合约的对象
+let contractAddress = "0xa9554ec86cad7b1035e5251a0fa6db3eeccec0f9";	    // 合约地址
+let certContract = new web3.eth.Contract(abi,contractAddress, options);   //调用web3 去获取到合约的对象
 
 // let eth = new Eth(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
-let fromAddress = "0xb247e2b628caa0e34cbd27f84bffd4ebe8158f99";
-/*
-let fromAddress;
-web3.eth.getCoinbase()
-    .then(function(coinbase) {
-        fromAddress = coinbase;
-        console.log(fromAddress);
-    });
-*/
-
 // let balance = web3.eth.getBalance(coinbase);
-// console.log(contract.methods);
+// console.log(certContract.methods);
 
 
 /* region common api */
@@ -258,35 +281,40 @@ app.get("/getPastLogs",function(req,resp){
 
 // app.get("/getCertList",function(req,resp){
 //     // resp.send(certList);
-//     contract.methods.getCertNameList().call(function(error,result){
+//     certContract.methods.getCertNameList().call(function(error,result){
 //         resp.send(result);
 //     });
 // });
 app.get("/getCertIdList",function(req,resp){
     // resp.send(certList);
-    contract.methods.getCertIdList().call(function(error,result){
+    certContract.methods.getCertIdList().call(function(error,result){
+        console.log('IdList：', '\n'+result);
         resp.send(result);
     });
 });
 app.get("/getCertNameList",function(req,resp){
     // resp.send(certList);
-    contract.methods.getCertNameList().call(function(error,result){
+    
+    certContract.methods.getCertNameList().call(options, function(error,result){
+        console.log('NameList：', '\n'+error, '\n'+result);
         resp.send(result);
     });
+    
+    // certContract.methods.getCertNameList().call(options).then(function(error, result){
+    //     console.log('NameList：', '\n'+error, '\n'+result);
+    // });
+    
 });
 app.post("/addCert",function(req,resp){
     console.log(req.body);
-    let options = {
-        from: fromAddress,
-    };
-    contract.methods.addCert(req.body.certName, req.body.certMeaning).send(options, function(error,result){
+    certContract.methods.addCert(req.body.certName, req.body.certMeaning).send(options, function(error,result){
         console.log('result', error, result);    //返回32字节的交易哈希值
         resp.send(result);
     })
 });
 app.get("/getCert",function(req,resp){
     console.log(req.body);
-    contract.methods.getCert().call(function(error,result){
+    certContract.methods.getCert().call(function(error,result){
         resp.send(result);
     });
 });
@@ -329,8 +357,8 @@ app.post("/setMessage",function(req,resp){
     let options = {
         from: fromAddress,
     };
-    // console.log(contract.methods.setMsg(req.body.str).encodeABI());
-    contract.methods.setMsg(req.body.str).send(options, function(error,result){
+    // console.log(certContract.methods.setMsg(req.body.str).encodeABI());
+    certContract.methods.setMsg(req.body.str).send(options, function(error,result){
         console.log('result', error, result);    //返回32字节的交易哈希值
         resp.send(result);
     })
@@ -351,7 +379,7 @@ app.post("/setMessage",function(req,resp){
 
 // get
 app.get("/getMessage",function(req,resp){
-    contract.methods.getMsg().call(function(error,result){
+    certContract.methods.getMsg().call(function(error,result){
         console.log(error, result);
         resp.send(result);
     });

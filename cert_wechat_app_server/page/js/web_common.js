@@ -89,6 +89,12 @@ let abi = [
         "type": "function"
     },
     {
+        "inputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
         "constant": true,
         "inputs": [
             {
@@ -181,12 +187,26 @@ let abi = [
         "payable": false,
         "stateMutability": "view",
         "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "minter",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
     }
 ];
 
-let contractAddress = "0x46a902022bbb724e1ec5d6917ce7d694cba8b05d";		// 合约地址
+let contractAddress = "0xa9554ec86cad7b1035e5251a0fa6db3eeccec0f9";		// 合约地址
 let myContract = web3.eth.contract(abi);
-let myContractInstance = myContract.at(contractAddress);
+let certContract = myContract.at(contractAddress);
 
 let blockNumber = web3.eth.blockNumber;
 let blockHash;

@@ -30,8 +30,21 @@ function setMsgArr() {
 }
 
 function getMsgArr() {
-	let result = certContract.getMsgArr();
-	console.log(result);
+    let result = certContract.getMsgArr(function (error,result) {
+        console.log(error,result);
+    });
+}
+
+function returnBool() {
+    let result = certContract.returnBool(function (error,result) {
+        console.log(error,result);
+    });
+}
+
+function returnBoolArr() {
+    let result = certContract.returnBoolArr(function (error,result) {
+        console.log(error,result);
+    });
 }
 
 

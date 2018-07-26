@@ -36,9 +36,15 @@ app.get('/msg', function(req, res){
 
 
 /* web3 init */
+// let web3;
+// if (typeof web3 !== 'undefined') {
+//     web3 = new Web3(web3.currentProvider);
+// } else {
+//     web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+// }
+let web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 // let web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.2.68:8545"));
 // let web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.2.53:4444"));
-let web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 
 let fromAddress = "0xb247e2b628caa0e34cbd27f84bffd4ebe8158f99";
 /*
@@ -55,21 +61,59 @@ let options = {
 
 let abi = [
     {
-        "constant": false,
-        "inputs": [
+        "constant": true,
+        "inputs": [],
+        "name": "minter",
+        "outputs": [
             {
-                "name": "_certName",
-                "type": "string"
-            },
-            {
-                "name": "_certMeaning",
-                "type": "string"
+                "name": "",
+                "type": "address"
             }
         ],
-        "name": "addCert",
-        "outputs": [],
         "payable": false,
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "returnBool",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getCertNameList",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "returnBoolArr",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -98,20 +142,6 @@ let abi = [
         "constant": false,
         "inputs": [
             {
-                "name": "_msg",
-                "type": "string"
-            }
-        ],
-        "name": "setMsg",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
                 "name": "_msg1",
                 "type": "string"
             },
@@ -127,12 +157,6 @@ let abi = [
         "type": "function"
     },
     {
-        "inputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
         "constant": true,
         "inputs": [
             {
@@ -145,6 +169,80 @@ let abi = [
             {
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getMsg",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_certName",
+                "type": "string"
+            },
+            {
+                "name": "_certMeaning",
+                "type": "string"
+            }
+        ],
+        "name": "addCert",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_msg",
+                "type": "string"
+            }
+        ],
+        "name": "setMsg",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getMsgArr",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string[]"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getCertIdList",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256[]"
             }
         ],
         "payable": false,
@@ -171,78 +269,14 @@ let abi = [
         "type": "function"
     },
     {
-        "constant": true,
         "inputs": [],
-        "name": "getCertIdList",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256[]"
-            }
-        ],
         "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getCertNameList",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getMsg",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getMsgArr",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "minter",
-        "outputs": [
-            {
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        "stateMutability": "nonpayable",
+        "type": "constructor"
     }
 ];
 
-let contractAddress = "0xa9554ec86cad7b1035e5251a0fa6db3eeccec0f9";	    // 合约地址
+let contractAddress = "0xc39333236c9bcd4ace0a9bb0f9fa29272cf86222";	    // 合约地址
 let certContract = new web3.eth.Contract(abi,contractAddress, options);   //调用web3 去获取到合约的对象
 
 // let eth = new Eth(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
@@ -305,6 +339,8 @@ app.get("/getCertNameList",function(req,resp){
     // });
     
 });
+
+
 app.post("/addCert",function(req,resp){
     console.log(req.body);
     certContract.methods.addCert(req.body.certName, req.body.certMeaning).send(options, function(error,result){
@@ -322,10 +358,6 @@ app.get("/getCert",function(req,resp){
 
 
 
-
-
-
-
 let unlockAccount = function () {
     let unlock = new Promise(function (resolve, reject) {
         
@@ -336,16 +368,6 @@ let unlockAccount = function () {
         }
     });
 };
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -379,10 +401,15 @@ app.post("/setMessage",function(req,resp){
 
 // get
 app.get("/getMessage",function(req,resp){
-    certContract.methods.getMsg().call(function(error,result){
+    let msg = certContract.methods.getMsg().call(function(error,result){
         console.log(error, result);
         resp.send(result);
     });
+    // msg.then(function(result) {
+    //     console.log('result', result);
+    // });
+    // console.log(msg);
+    
 });
 
 

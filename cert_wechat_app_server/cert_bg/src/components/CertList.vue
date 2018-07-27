@@ -1,28 +1,26 @@
 <template>
   <div>
-    <div>
-      <!-- Cert Form -->
-      <h1>Cert Form</h1>
+    <!-- Cert Form -->
+    <h1>Cert Form</h1>
 
-      <h3>set cert</h3>
-      <label for="cert_name">cert_name</label>
-      <input type="text" name="certName" id="cert_name" value="silly" v-model="certName"><br>
+    <h3>set cert</h3>
+    <label for="cert_name">cert_name</label>
+    <input type="text" name="certName" id="cert_name" value="silly" v-model="certName"><br>
 
-      <label for="cert_meaning">cert_meaning</label>
-      <input type="text" name="certMeaning" id="cert_meaning" value="傻证" v-model="certMeaning"><br>
+    <label for="cert_meaning">cert_meaning</label>
+    <input type="text" name="certMeaning" id="cert_meaning" value="傻证" v-model="certMeaning"><br>
 
-      <label></label>
-      <button @click="addCert()">addCert</button>
-      <br>
-      <br>
+    <label></label>
+    <button @click="addCert()">addCert</button>
+    <br>
+    <br>
 
-      <!--<h3>get cert</h3>-->
-      <!--<label for="cert_meaning">cert_meaning</label>-->
-      <!--<input type="text" name="certId" id="cert_id" value="1" v-model="certId"><br>-->
-      <!--<label></label>-->
-      <!--<button @click="getCert()">getCert</button>-->
+    <!--<h3>get cert</h3>-->
+    <!--<label for="cert_meaning">cert_meaning</label>-->
+    <!--<input type="text" name="certId" id="cert_id" value="1" v-model="certId"><br>-->
+    <!--<label></label>-->
+    <!--<button @click="getCert()">getCert</button>-->
 
-    </div>
     <br>
 
 

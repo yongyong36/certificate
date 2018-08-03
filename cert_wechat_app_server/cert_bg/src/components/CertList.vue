@@ -3,15 +3,29 @@
     <!-- Cert Form -->
     <h1>Cert Form</h1>
 
-    <h3>set cert</h3>
-    <label for="cert_name">cert_name</label>
-    <input type="text" name="certName" id="cert_name" value="silly" v-model="certName"><br>
+    <div class="col">
+      <h3>set cert</h3>
+      <label for="cert_name">cert_name</label>
+      <input type="text" name="certName" id="cert_name" value="silly" v-model="cert.certName"><br>
 
-    <label for="cert_meaning">cert_meaning</label>
-    <input type="text" name="certMeaning" id="cert_meaning" value="傻证" v-model="certMeaning"><br>
+      <label for="cert_meaning">cert_meaning</label>
+      <input type="text" name="certMeaning" id="cert_meaning" value="傻证" v-model="cert.certMeaning"><br>
 
-    <label></label>
-    <button @click="addCert()">addCert</button>
+      <label></label>
+      <button @click="addCert()">addCert</button>
+    </div>
+
+    <div class="col">
+      <h3>set cert bytes</h3>
+      <label for="cert_bytes_name">cert_name</label>
+      <input type="text" name="certName" id="cert_bytes_name" value="silly" v-model="certBytes.certName"><br>
+
+      <label for="cert_bytes_meaning">cert_meaning</label>
+      <input type="text" name="certMeaning" id="cert_bytes_meaning" value="傻证" v-model="certBytes.certMeaning"><br>
+
+      <label></label>
+      <button @click="addCertBytes()">addCertBytes</button>
+    </div>
     <br>
     <br>
 
@@ -34,13 +48,32 @@
     <!-- Cert List -->
     <hr>
     <h1>Cert List</h1>
-    <button @click="getCertIdList()">getCertIdList</button>
-    <button @click="getCertNameList()">getCertNameList</button>
-    <ul>
-      <li v-for="cert in certList">
-        {{cert}}
-      </li>
-    </ul>
+
+    <div class="col">
+      <h3>cert</h3>
+      <button @click="getCertIdList()">getCertIdList</button>
+      <button @click="getCertNameList()">getCertNameList</button>
+      <ul>
+        <li v-for="cert in cert.list">
+          {{cert}}
+        </li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <h3>cert bytes</h3>
+      <button @click="getCertBytesIdList()">getCertIdList</button>
+
+      <div>
+        <button @click="getCertBytes(certBytes.getById)">getCertBytes</button>
+        <input type="text" v-model="certBytes.getById">
+      </div>
+      <ul>
+        <li v-for="cert in certBytes.list">
+          {{cert}}
+        </li>
+      </ul>
+    </div>
 
   </div>
 </template>
@@ -61,136 +94,8 @@
   // console.log(ethAbi, web3);
   // console.log(coinbase);
 
-  let abi = [
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "minter",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "returnBool",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "getCertNameList",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string[]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "returnBoolArr",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool[]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_certId",
-          "type": "uint256"
-        },
-        {
-          "name": "_inviterId",
-          "type": "uint256"
-        },
-        {
-          "name": "_invitedId",
-          "type": "uint256"
-        }
-      ],
-      "name": "addCertBind",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_msg1",
-          "type": "string"
-        },
-        {
-          "name": "_msge2",
-          "type": "string"
-        }
-      ],
-      "name": "setMsgArr",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_invitedId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getCertBindByInvited",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "getMsg",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
+  let abi =
+  [
     {
       "constant": false,
       "inputs": [
@@ -213,24 +118,168 @@
       "constant": false,
       "inputs": [
         {
-          "name": "_msg",
-          "type": "string"
+          "name": "_certId",
+          "type": "uint256"
+        },
+        {
+          "name": "_inviterId",
+          "type": "uint256"
+        },
+        {
+          "name": "_invitedId",
+          "type": "uint256"
+        },
+        {
+          "name": "_bindTime",
+          "type": "uint256"
         }
       ],
-      "name": "setMsg",
+      "name": "addCertBind",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
-      "constant": true,
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_certName",
+          "type": "bytes"
+        },
+        {
+          "name": "_certMeaning",
+          "type": "bytes"
+        }
+      ],
+      "name": "addCertBytes",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "inputs": [],
-      "name": "getMsgArr",
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCert",
       "outputs": [
         {
           "name": "",
-          "type": "string[]"
+          "type": "string"
+        },
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_invitedId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCertBindByInvited",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_inviterId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCertBindByInviter",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCertBytes",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes"
+        },
+        {
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getCertBytesIdList",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256[]"
         }
       ],
       "payable": false,
@@ -253,31 +302,21 @@
     },
     {
       "constant": true,
-      "inputs": [
-        {
-          "name": "_inviterId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getCertBindByInviter",
+      "inputs": [],
+      "name": "minter",
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
+          "type": "address"
         }
       ],
       "payable": false,
       "stateMutability": "view",
       "type": "function"
-    },
-    {
-      "inputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "constructor"
     }
-  ];
-  let contractAddress = "0xc39333236c9bcd4ace0a9bb0f9fa29272cf86222";		// 合约地址
+  ]
+  ;
+  let contractAddress = "0x3a51e5699ef0360d05ab97df4c50e40d8985aa0f";		// 合约地址
   let myContract = web3.eth.contract(abi);
   let certContract = myContract.at(contractAddress);
 
@@ -341,86 +380,42 @@
     name: 'CertList',
     data () {
       return {
-        certList: [],
-        certIdList: [],
-        certNameList: [],
-        certName: 'aaaaa',
-        certMeaning: 'aaaaaa',
-        certId: 1,
+        cert: {
+          certId: 1,
+          certName: 'aaaaa',
+          certMeaning: 'aaaaaa',
+          list: [],
+          idList: [],
+          nameList: [],
+        },
+        certBytes: {
+          certId: 1,
+          certName: 'aaaaa',
+          certMeaning: 'aaaaaa',
+          list: [],
+          idList: [],
+          nameList: [],
+          getById: 0,
+        },
       }
     },
     http: { headers: {'Content-Type': 'application/x-www-form-urlencoded'} },
     methods: {
       setDataCertList: function() {
         let _this = this;
-        if (this.certIdList.length > 0 && this.certNameList.length > 0) {
-          _this.certList = [];
-          this.certIdList.forEach(function (item, index) {
-            _this.certList.push({certId: item, certName: _this.certNameList[index]});
+        if (this.cert.idList.length > 0 && this.cert.nameList.length > 0) {
+          _this.cert.list = [];
+          this.cert.idList.forEach(function (item, index) {
+            _this.cert.list.push({certId: item, certName: _this.cert.nameList[index]});
           });
         }
-        // console.log('CertList', this.certList);
-      },
-      getCertIdList: function() {
-        let _this = this;
-
-/*
-        certContract.getCertIdList(options, function(error,result) {
-          console.log('IdList：', error,result);
-          // _this.certIdList = result;
-        });
-*/
-
-/*
-        certContract.getCertIdList.call(options, function(error,result) {
-          console.log('IdList：', error,result);
-            // _this.certIdList = result;
-          });
-*/
-
-        Vue.http.get('http://127.0.0.1:3000/getCertIdList')
-          .then((resp) => {
-            // console.log('IdList：', resp.data);
-            // if (resp.data.length > 1) {
-            //   resp.data.shift();
-            // }
-            this.certIdList = resp.data;
-            // console.log('IdList：', this.certIdList);
-          },(err) => {
-            console.log(err);
-          })
-      },
-      getCertNameList: function() {
-        let _this = this;
-
-        certContract.getCertNameList(options, function(error,result) {
-          console.log('NameList：', error,result);
-          _this.certNameList = result;
-          // if (_this.certNameList.length > 1) {
-          //   _this.certNameList.shift();
-          //   _this.certNameList.push(' ');
-          // }
-        });
-
-        Vue.http.get('http://127.0.0.1:3000/getCertNameList')
-          .then((resp) => {
-            console.log('NameList：', resp);
-            // if (resp.data.length > 1) {
-            //   resp.data.shift();
-            // }
-            this.certNameList = resp.data;
-            // this.setDataCertList();
-            // console.log('NameList：', this.certNameList);
-          },(err) => {
-            console.log('NameList：', err);
-          })
-
+        // console.log('CertList', this.cert.list);
       },
       addCert: function() {
-        console.log(this.certName, this.certMeaning);
+        console.log(this.cert.certName, this.cert.certMeaning);
         let data = {
-          certName: this.certName,
-          certMeaning: this.certMeaning,
+          certName: this.cert.certName,
+          certMeaning: this.cert.certMeaning,
         };
         // Vue.http.post('http://127.0.0.1:3000/addCert', data, function (err, result) {
         //   console.log(err, result);
@@ -442,10 +437,65 @@
           // });
         })
       },
+      getCertIdList: function() {
+        let _this = this;
+
+/*
+        certContract.getCertIdList(options, function(error,result) {
+          console.log('IdList：', error,result);
+          // _this.cert.idList = result;
+        });
+*/
+
+/*
+        certContract.getCertIdList.call(options, function(error,result) {
+          console.log('IdList：', error,result);
+            // _this.cert.idList = result;
+          });
+*/
+
+        Vue.http.get('http://127.0.0.1:3000/getCertIdList')
+          .then((resp) => {
+            // console.log('IdList：', resp.data);
+            // if (resp.data.length > 1) {
+            //   resp.data.shift();
+            // }
+            this.cert.idList = resp.data;
+            // console.log('IdList：', this.cert.idList);
+          },(err) => {
+            console.log(err);
+          })
+      },
+      getCertNameList: function() {
+        let _this = this;
+
+        // certContract.getCertNameList(options, function(error,result) {
+        //   console.log('NameList：', error,result);
+        //   _this.cert.nameList = result;
+        //   // if (_this.cert.nameList.length > 1) {
+        //   //   _this.cert.nameList.shift();
+        //   //   _this.cert.nameList.push(' ');
+        //   // }
+        // });
+
+        // Vue.http.get('http://127.0.0.1:3000/getCertNameList')
+        //   .then((resp) => {
+        //     console.log('NameList：', resp);
+        //     // if (resp.data.length > 1) {
+        //     //   resp.data.shift();
+        //     // }
+        //     this.cert.nameList = resp.data;
+        //     // this.cert.setDataCertList();
+        //     // console.log('NameList：', this.cert.nameList);
+        //   },(err) => {
+        //     console.log('NameList：', err);
+        //   })
+
+      },
       getCert: function() {
         let data = {
-          // certId: parseInt(this.certId),
-          certId: this.certId,
+          // certId: parseInt(this.cert.certId),
+          certId: this.cert.certId,
         };
         certContract.getCert(0, options, function(error,result) {
           console.log(error,result);
@@ -453,11 +503,107 @@
         // Vue.http.get('http://127.0.0.1:3000/getCert', data)
         //   .then((resp) => {
         //     console.log(resp.data);
-        //     this.certList = resp.data;
+        //     this.cert.list = resp.data;
         //   },(err) => {
         //     console.log(err);
         //   });
       },
+
+
+
+      addCertBytes: function() {
+        // console.log(this.certBytes.certName, this.certBytes.certMeaning);
+        let data = {
+          certName: web3.toHex(this.stringToByte(this.certBytes.certName)),
+          certMeaning: web3.toHex(this.stringToByte(this.certBytes.certMeaning)),
+        };
+        // Vue.http.post('http://127.0.0.1:3000/addCert', data, function (err, result) {
+        //   console.log(err, result);
+        // })
+        // Vue.http.post('http://127.0.0.1:3000/addCert', data)
+        //   .then((resp) => {
+        //     console.log(resp.data);
+        //   },(err) => {
+        //     console.log(err);
+        //   })
+        unlockAccount().then(function () {
+          console.log('unlock true', data.certName, data.certMeaning); //, certContract
+          certContract.addCertBytes(data.certName, data.certMeaning, options, function(error,result) {
+            console.log(error,result);
+          });
+
+          // certContract.addCert.sendTransaction(data.certName, data.certMeaning, options, function(error,result) {
+          //   console.log(error,result);
+          // });
+        })
+      },
+      getCertBytesIdList: function() {
+        let _this = this;
+
+        /*
+                certContract.getCertBytesIdList(options, function(error,result) {
+                  console.log('IdList：', error,result);
+                  // _this.cert.idList = result;
+                });
+        */
+
+        /*
+                certContract.getCertBytesIdList.call(options, function(error,result) {
+                  console.log('IdList：', error,result);
+                    // _this.cert.idList = result;
+                  });
+        */
+
+        Vue.http.get('http://127.0.0.1:3000/getCertBytesIdList')
+          .then((resp) => {
+            // console.log('IdList：', resp.data);
+            // if (resp.data.length > 1) {
+            //   resp.data.shift();
+            // }
+            this.certBytes.idList = resp.data;
+            console.log('IdList：', this.certBytes.idList);
+          },(err) => {
+            console.log(err);
+          })
+      },
+      getCertBytes: function(id) {
+        let _this = this;
+        let data = {
+          // certId: parseInt(this.certBytes.certId),
+          certId: id,
+        };
+        certContract.getCertBytes(data.certId, options, function(error,result) {
+          console.log(error,result);
+          let certB = {
+            id: data.certId,
+            name: '',
+            meaning: '',
+          };
+          result.forEach(function (item, index) {
+            switch (index) {
+              case 0:
+                certB.name = _this.byteToString(JSON.parse(web3.toAscii(item))); break;
+              case 1:
+                certB.meaning = _this.byteToString(JSON.parse(web3.toAscii(item))); break;
+              default: break;
+            }
+          });
+          _this.certBytes.list.push(certB);
+          console.log(_this.certBytes.list);
+
+        });
+        // Vue.http.get('http://127.0.0.1:3000/getCert', data)
+        //   .then((resp) => {
+        //     console.log(resp.data);
+        //     this.certBytes.list = resp.data;
+        //   },(err) => {
+        //     console.log(err);
+        //   });
+      },
+
+
+
+
       getPastLogs: function() {
         Vue.http.get('http://127.0.0.1:3000/getPastLogs')
           .then((resp) => {
@@ -468,21 +614,82 @@
       },
 
 
+      stringToByte: function (str) {
+        let bytes = [];
+        let len, c;
+        len = str.length;
+        for (let i = 0; i < len; i++) {
+          c = str.charCodeAt(i);
+          if (c >= 0x010000 && c <= 0x10FFFF) {
+            bytes.push(((c >> 18) & 0x07) | 0xF0);
+            bytes.push(((c >> 12) & 0x3F) | 0x80);
+            bytes.push(((c >> 6) & 0x3F) | 0x80);
+            bytes.push((c & 0x3F) | 0x80);
+          } else if (c >= 0x000800 && c <= 0x00FFFF) {
+            bytes.push(((c >> 12) & 0x0F) | 0xE0);
+            bytes.push(((c >> 6) & 0x3F) | 0x80);
+            bytes.push((c & 0x3F) | 0x80);
+          } else if (c >= 0x000080 && c <= 0x0007FF) {
+            bytes.push(((c >> 6) & 0x1F) | 0xC0);
+            bytes.push((c & 0x3F) | 0x80);
+          } else {
+            bytes.push(c & 0xFF);
+          }
+        }
+        return bytes;
+      },
+      byteToString: function (arr) {
+        if (typeof arr === 'string') {
+          return arr;
+        }
+        let str = '',
+          _arr = arr;
+        for (let i = 0; i < _arr.length; i++) {
+          let one = _arr[i].toString(2),
+            v = one.match(/^1+?(?=0)/);
+          if (v && one.length === 8) {
+            let bytesLength = v[0].length;
+            let store = _arr[i].toString(2).slice(7 - bytesLength);
+            for (let st = 1; st < bytesLength; st++) {
+              store += _arr[st + i].toString(2).slice(2);
+            }
+            str += String.fromCharCode(parseInt(store, 2));
+            i += bytesLength - 1;
+          } else {
+            str += String.fromCharCode(_arr[i]);
+          }
+        }
+        return str;
+      },
 
+
+
+    },
+    computed: {
+      'cert.list': function() {
+        let _this = this;
+        if (this.cert.idList.length > 0 && this.cert.nameList.length > 0) {
+          _this.cert.list = [];
+          this.cert.idList.forEach(function (item, index) {
+            _this.cert.list.push({certId: item, certName: _this.cert.nameList[index]});
+          });
+        }
+        return this.cert.list;
+      }
     },
     created: function() {
       this.getCertIdList();
-      this.getCertNameList();
+      // this.getCertNameList();
     },
     watch: {
-      certIdList: function (val) {
-        // console.log(val);
-        this.setDataCertList();
-      },
-      certNameList: function (val) {
-        // console.log(val);
-        this.setDataCertList();
-      },
+      // idList: function (val) {
+      //   // console.log(val);
+      //   this.setDataCertList();
+      // },
+      // nameList: function (val) {
+      //   // console.log(val);
+      //   this.setDataCertList();
+      // },
     }
   }
 </script>
@@ -495,12 +702,19 @@
     -ms-user-select: none;
     user-select: none;
   }
+  *:focus {
+    outline: none;
+  }
   ul, li {
 
   }
   button {
-    padding: 5px 10px;
-    margin: 0 5px;
+    padding: 8px 15px;
+    margin: 0 5px 10px;
+    background-color: #d6d6d6;
+    border: none;
+    color: #2c3e50;
+    cursor: pointer;
   }
   label {
     display: inline-block;
@@ -511,6 +725,11 @@
   input {
     padding: 5px 10px;
     margin: 0 5px 10px 5px;
+  }
+  .col {
+    display: inline-block;
+    width: 49%;
+    vertical-align: top;
   }
 </style>
 

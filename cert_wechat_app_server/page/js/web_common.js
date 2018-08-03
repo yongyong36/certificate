@@ -14,136 +14,8 @@ let balance = web3.eth.getBalance(coinbase);
 // console.log(ethAbi, web3);
 // console.log(coinbase);
 
-let abi = [
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "minter",
-        "outputs": [
-            {
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "returnBool",
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getCertNameList",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "returnBoolArr",
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_certId",
-                "type": "uint256"
-            },
-            {
-                "name": "_inviterId",
-                "type": "uint256"
-            },
-            {
-                "name": "_invitedId",
-                "type": "uint256"
-            }
-        ],
-        "name": "addCertBind",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_msg1",
-                "type": "string"
-            },
-            {
-                "name": "_msge2",
-                "type": "string"
-            }
-        ],
-        "name": "setMsgArr",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "_invitedId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getCertBindByInvited",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getMsg",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
+let abi =
+[
     {
         "constant": false,
         "inputs": [
@@ -166,24 +38,168 @@ let abi = [
         "constant": false,
         "inputs": [
             {
-                "name": "_msg",
-                "type": "string"
+                "name": "_certId",
+                "type": "uint256"
+            },
+            {
+                "name": "_inviterId",
+                "type": "uint256"
+            },
+            {
+                "name": "_invitedId",
+                "type": "uint256"
+            },
+            {
+                "name": "_bindTime",
+                "type": "uint256"
             }
         ],
-        "name": "setMsg",
+        "name": "addCertBind",
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "constant": true,
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_certName",
+                "type": "bytes"
+            },
+            {
+                "name": "_certMeaning",
+                "type": "bytes"
+            }
+        ],
+        "name": "addCertBytes",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
-        "name": "getMsgArr",
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCert",
         "outputs": [
             {
                 "name": "",
-                "type": "string[]"
+                "type": "string"
+            },
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_invitedId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCertBindByInvited",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_inviterId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCertBindByInviter",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCertBytes",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes"
+            },
+            {
+                "name": "",
+                "type": "bytes"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getCertBytesIdList",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256[]"
             }
         ],
         "payable": false,
@@ -206,33 +222,23 @@ let abi = [
     },
     {
         "constant": true,
-        "inputs": [
-            {
-                "name": "_inviterId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getCertBindByInviter",
+        "inputs": [],
+        "name": "minter",
         "outputs": [
             {
                 "name": "",
-                "type": "uint256"
+                "type": "address"
             }
         ],
         "payable": false,
         "stateMutability": "view",
         "type": "function"
-    },
-    {
-        "inputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "constructor"
     }
-];
+]
+;
 
 
-let contractAddress = "0xc39333236c9bcd4ace0a9bb0f9fa29272cf86222";		// 合约地址
+let contractAddress = "0x3a51e5699ef0360d05ab97df4c50e40d8985aa0f";		// 合约地址
 let myContract = web3.eth.contract(abi);
 let certContract = myContract.at(contractAddress);
 

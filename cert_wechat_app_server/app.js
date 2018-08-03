@@ -59,136 +59,8 @@ let options = {
     from: fromAddress,
 };
 
-let abi = [
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "minter",
-        "outputs": [
-            {
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "returnBool",
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getCertNameList",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "returnBoolArr",
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool[]"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_certId",
-                "type": "uint256"
-            },
-            {
-                "name": "_inviterId",
-                "type": "uint256"
-            },
-            {
-                "name": "_invitedId",
-                "type": "uint256"
-            }
-        ],
-        "name": "addCertBind",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_msg1",
-                "type": "string"
-            },
-            {
-                "name": "_msge2",
-                "type": "string"
-            }
-        ],
-        "name": "setMsgArr",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "_invitedId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getCertBindByInvited",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "getMsg",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
+let abi =
+[
     {
         "constant": false,
         "inputs": [
@@ -211,24 +83,168 @@ let abi = [
         "constant": false,
         "inputs": [
             {
-                "name": "_msg",
-                "type": "string"
+                "name": "_certId",
+                "type": "uint256"
+            },
+            {
+                "name": "_inviterId",
+                "type": "uint256"
+            },
+            {
+                "name": "_invitedId",
+                "type": "uint256"
+            },
+            {
+                "name": "_bindTime",
+                "type": "uint256"
             }
         ],
-        "name": "setMsg",
+        "name": "addCertBind",
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "constant": true,
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_certName",
+                "type": "bytes"
+            },
+            {
+                "name": "_certMeaning",
+                "type": "bytes"
+            }
+        ],
+        "name": "addCertBytes",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
-        "name": "getMsgArr",
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCert",
         "outputs": [
             {
                 "name": "",
-                "type": "string[]"
+                "type": "string"
+            },
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_invitedId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCertBindByInvited",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_inviterId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCertBindByInviter",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "getCertBytes",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bytes"
+            },
+            {
+                "name": "",
+                "type": "bytes"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getCertBytesIdList",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256[]"
             }
         ],
         "payable": false,
@@ -251,32 +267,22 @@ let abi = [
     },
     {
         "constant": true,
-        "inputs": [
-            {
-                "name": "_inviterId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getCertBindByInviter",
+        "inputs": [],
+        "name": "minter",
         "outputs": [
             {
                 "name": "",
-                "type": "uint256"
+                "type": "address"
             }
         ],
         "payable": false,
         "stateMutability": "view",
         "type": "function"
-    },
-    {
-        "inputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "constructor"
     }
-];
+]
+;
 
-let contractAddress = "0xc39333236c9bcd4ace0a9bb0f9fa29272cf86222";	    // 合约地址
+let contractAddress = "0x3a51e5699ef0360d05ab97df4c50e40d8985aa0f";	    // 合约地址
 let certContract = new web3.eth.Contract(abi,contractAddress, options);   //调用web3 去获取到合约的对象
 
 // let eth = new Eth(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
@@ -300,19 +306,12 @@ app.get("/getPastLogs",function(req,resp){
 });
 
 
-/* region certificate api */
-// certificate
-// let certList = [
-//     {id: 1, type: 'merry', name: '结婚证', couple: true},
-//     {id: 2, type: 'lovers', name: '情侣证', couple: true},
-//     {id: 3, type: 'single', name: '狗牌', couple: false},
-//     {id: 4, type: 'passerby', name: '路人证', couple: true},
-//     {id: 5, type: 'bestie', name: '闺蜜证', couple: true},
-//     {id: 6, type: 'bestFriends', name: '死党证', couple: true},
-//     {id: 7, type: 'queen', name: '喵星女王', couple: false},
-//     {id: 8, type: 'prince', name: '小王子', couple: false},
-// ];
 
+
+
+/* region certificate api */
+
+/* cert api */
 // app.get("/getCertList",function(req,resp){
 //     // resp.send(certList);
 //     certContract.methods.getCertNameList().call(function(error,result){
@@ -326,21 +325,16 @@ app.get("/getCertIdList",function(req,resp){
         resp.send(result);
     });
 });
-app.get("/getCertNameList",function(req,resp){
+// app.get("/getCertNameList",function(req,resp){
     // resp.send(certList);
-    
-    certContract.methods.getCertNameList().call(options, function(error,result){
-        console.log('NameList：', '\n'+error, '\n'+result);
-        resp.send(result);
-    });
-    
+    // certContract.methods.getCertNameList().call(options, function(error,result){
+    //     console.log('NameList：', '\n'+error, '\n'+result);
+    //     resp.send(result);
+    // });
     // certContract.methods.getCertNameList().call(options).then(function(error, result){
     //     console.log('NameList：', '\n'+error, '\n'+result);
     // });
-    
-});
-
-
+// });
 app.post("/addCert",function(req,resp){
     console.log(req.body);
     certContract.methods.addCert(req.body.certName, req.body.certMeaning).send(options, function(error,result){
@@ -354,6 +348,33 @@ app.get("/getCert",function(req,resp){
         resp.send(result);
     });
 });
+
+
+/* cert bytes api */
+app.get("/getCertBytesIdList",function(req,resp){
+    // resp.send(certList);
+    certContract.methods.getCertBytesIdList().call(function(error,result){
+        console.log('IdList：', '\n'+result);
+        resp.send(result);
+    });
+});
+app.post("/addCertBytes",function(req,resp){
+    console.log('addCertBytes body', req.body);
+    certContract.methods.addCertBytes(req.body.certName, req.body.certMeaning).send(options, function(error,result){
+        console.log('result', error, result);    //返回32字节的交易哈希值
+        resp.send(result);
+    })
+});
+app.get("/getCertBytes",function(req,resp){
+    console.log(req.body);
+    certContract.methods.getCertBytes().call(function(error,result){
+        resp.send(result);
+    });
+});
+
+/* endregion certificate api */
+
+
 
 
 
@@ -421,9 +442,8 @@ let server = app.listen(3000, function() {
 });
 
 
-
-
 /* bytes string 互转 */
+// 十六进制
 function strToHexCharCode(str) {
     if(str === "")
         return "";
@@ -451,10 +471,54 @@ function hexCharCodeToStr(hexCharCodeStr) {
     return resultStr.join("");
 }
 
-
-
-
-
+// 二进制
+function stringToByte(str) {
+    let bytes = [];
+    let len, c;
+    len = str.length;
+    for (let i = 0; i < len; i++) {
+        c = str.charCodeAt(i);
+        if (c >= 0x010000 && c <= 0x10FFFF) {
+            bytes.push(((c >> 18) & 0x07) | 0xF0);
+            bytes.push(((c >> 12) & 0x3F) | 0x80);
+            bytes.push(((c >> 6) & 0x3F) | 0x80);
+            bytes.push((c & 0x3F) | 0x80);
+        } else if (c >= 0x000800 && c <= 0x00FFFF) {
+            bytes.push(((c >> 12) & 0x0F) | 0xE0);
+            bytes.push(((c >> 6) & 0x3F) | 0x80);
+            bytes.push((c & 0x3F) | 0x80);
+        } else if (c >= 0x000080 && c <= 0x0007FF) {
+            bytes.push(((c >> 6) & 0x1F) | 0xC0);
+            bytes.push((c & 0x3F) | 0x80);
+        } else {
+            bytes.push(c & 0xFF);
+        }
+    }
+    return bytes;
+}
+function byteToString(arr) {
+    if (typeof arr === 'string') {
+        return arr;
+    }
+    let str = '',
+        _arr = arr;
+    for (let i = 0; i < _arr.length; i++) {
+        let one = _arr[i].toString(2),
+            v = one.match(/^1+?(?=0)/);
+        if (v && one.length === 8) {
+            let bytesLength = v[0].length;
+            let store = _arr[i].toString(2).slice(7 - bytesLength);
+            for (let st = 1; st < bytesLength; st++) {
+                store += _arr[st + i].toString(2).slice(2);
+            }
+            str += String.fromCharCode(parseInt(store, 2));
+            i += bytesLength - 1;
+        } else {
+            str += String.fromCharCode(_arr[i]);
+        }
+    }
+    return str;
+}
 
 
 

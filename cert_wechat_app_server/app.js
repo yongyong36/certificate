@@ -408,7 +408,7 @@ app.post("/getCertBytes",function(req,resp){
     }
     
 });
-app.get("/getCertBytesList",function(req,resp){
+app.post("/getCertBytesList",function(req,resp){
     certContract.methods.getCertBytesIdList().call(function(error,result){
         // console.log('IdList：', '\n'+result);
         let certIdList = result;

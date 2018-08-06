@@ -492,7 +492,7 @@
       },
       getCertBytesList: function(id) {
         let _this = this;
-        Vue.http.get('http://127.0.0.1:3000/getCertBytesList')
+        Vue.http.post('http://127.0.0.1:3000/getCertBytesList')
           .then((resp) => {
             _this.certBytes.list = resp.data.certBytesList;
             console.log(resp.data.certBytesList);

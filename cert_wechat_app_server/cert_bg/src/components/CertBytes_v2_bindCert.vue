@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Cert Form -->
-    <h1>Cert Form</h1>
+    <h1>Cert Form —— certBytes_v2_bindCert</h1>
 
     <div class="col">
       <h3>set cert bytes</h3>
@@ -33,7 +33,7 @@
         <input type="text" v-model="certBytes.getById">
       </div>
       <ul>
-        <li v-for="cert in certBytes.list">
+        <li v-for="cert in certBytes.list" :onclick="bindCert(cert.certId)">
           {{cert}}
         </li>
       </ul>
@@ -341,7 +341,7 @@
     return function(obj1,obj2){
       let value1 = obj1[property];
       let value2 = obj2[property];
-      console.log(value1 - value2);
+      // console.log(value1 - value2);
       return value1 - value2;     // 升序
     }
   }
@@ -368,21 +368,11 @@
       addCertBytes: function() {
         // console.log(this.certBytes.certName, this.certBytes.certMeaning);
         let data = {
-          // certName: web3.toHex(this.stringToByte(this.certBytes.certName)),
-          // certMeaning: web3.toHex(this.stringToByte(this.certBytes.certMeaning)),
           certName: this.certBytes.certName,
           certMeaning: this.certBytes.certMeaning,
         };
         unlockAccount().then(function () {
           console.log('unlock true', data.certName, data.certMeaning); //, certContract
-          // certContract.addCertBytes(data.certName, data.certMeaning, options, function(error,result) {
-          //   console.log(error,result);
-          // });
-
-          // certContract.addCert.sendTransaction(data.certName, data.certMeaning, options, function(error,result) {
-          //   console.log(error,result);
-          // });
-
           Vue.http.post('http://127.0.0.1:3000/addCertBytes', data)
             .then((resp) => {
               console.log(resp.data);
@@ -393,56 +383,19 @@
       },
       getCertBytesIdList: function() {
         let _this = this;
-
-        /*
-                certContract.getCertBytesIdList(options, function(error,result) {
-                  console.log('IdList：', error,result);
-                  // _this.cert.idList = result;
-                });
-        */
-
-        /*
-                certContract.getCertBytesIdList.call(options, function(error,result) {
-                  console.log('IdList：', error,result);
-                    // _this.cert.idList = result;
-                  });
-        */
-
         Vue.http.get('http://127.0.0.1:3000/getCertBytesIdList')
           .then((resp) => {
-            // console.log('IdList：', resp.data);
-            // if (resp.data.length > 1) {
-            //   resp.data.shift();
-            // }
             _this.certBytes.idList = resp.data;
-            // console.log('IdList：', _this.certBytes.idList);
-
             let listTemp = [];
             _this.certBytes.idList.forEach(function (item, index) {
               _this.getCertBytes(item).then(function (data) {
                 // console.info('then', data);
                 listTemp.push(data);
-
                 if (_this.certBytes.idList.length === listTemp.length) {
                   _this.certBytes.list = listTemp.sort(compareByCertId('certId'));
                 }
               });
-
-
             });
-
-            /*
-            // 自执行函数自动按顺序 push 请求回来的 cert
-            _this.certBytes.idList.forEach(function (item, index) {
-              (function(index){
-                _this.certBytes.list[index] = function(){
-                  _this.getCertBytes(item).then(function (data) {
-                    return data;
-                  });
-                }
-              })(index);
-            });
-            */
 
           },(err) => {
             console.log(err);
@@ -450,37 +403,13 @@
       },
       getCertBytes: function(id) {
         let _this = this;
-        // certContract.getCertBytes(data.certId, options, function(error,result) {
-        //   console.log(error,result);
-        //   let certB = {
-        //     id: data.certId,
-        //     name: '',
-        //     meaning: '',
-        //   };
-        //   result.forEach(function (item, index) {
-        //     switch (index) {
-        //       case 0:
-        //         certB.name = _this.byteToString(JSON.parse(web3.toAscii(item))); break;
-        //       case 1:
-        //         certB.meaning = _this.byteToString(JSON.parse(web3.toAscii(item))); break;
-        //       default: break;
-        //     }
-        //   });
-        //   _this.certBytes.list.push(certB);
-        //   console.log(_this.certBytes.list);
-        //
-        // });
-
         let data = {
           certId: id,
         };
-
         let promise = new Promise(function (resolve, reject) {
           Vue.http.post('http://127.0.0.1:3000/getCertBytes', data)
             .then((resp) => {
               console.log(resp.data.certObj);
-              // _this.certBytes.list.push(resp.data.certObj);
-              // this.certBytes.list = resp.data;
               resolve(resp.data.certObj);
             },(err) => {
               console.log(err);
@@ -492,7 +421,7 @@
       },
       getCertBytesList: function(id) {
         let _this = this;
-        Vue.http.get('http://127.0.0.1:3000/getCertBytesList')
+        Vue.http.post('http://127.0.0.1:3000/getCertBytesList')
           .then((resp) => {
             _this.certBytes.list = resp.data.certBytesList;
             console.log(resp.data.certBytesList);
@@ -502,66 +431,13 @@
 
       },
 
-      stringToByte: function (str) {
-        let bytes = [];
-        let len, c;
-        len = str.length;
-        for (let i = 0; i < len; i++) {
-          c = str.charCodeAt(i);
-          if (c >= 0x010000 && c <= 0x10FFFF) {
-            bytes.push(((c >> 18) & 0x07) | 0xF0);
-            bytes.push(((c >> 12) & 0x3F) | 0x80);
-            bytes.push(((c >> 6) & 0x3F) | 0x80);
-            bytes.push((c & 0x3F) | 0x80);
-          } else if (c >= 0x000800 && c <= 0x00FFFF) {
-            bytes.push(((c >> 12) & 0x0F) | 0xE0);
-            bytes.push(((c >> 6) & 0x3F) | 0x80);
-            bytes.push((c & 0x3F) | 0x80);
-          } else if (c >= 0x000080 && c <= 0x0007FF) {
-            bytes.push(((c >> 6) & 0x1F) | 0xC0);
-            bytes.push((c & 0x3F) | 0x80);
-          } else {
-            bytes.push(c & 0xFF);
-          }
-        }
-        return bytes;
-      },
-      byteToString: function (arr) {
-        if (typeof arr === 'string') {
-          return arr;
-        }
-        let str = '',
-          _arr = arr;
-        for (let i = 0; i < _arr.length; i++) {
-          let one = _arr[i].toString(2),
-            v = one.match(/^1+?(?=0)/);
-          if (v && one.length === 8) {
-            let bytesLength = v[0].length;
-            let store = _arr[i].toString(2).slice(7 - bytesLength);
-            for (let st = 1; st < bytesLength; st++) {
-              store += _arr[st + i].toString(2).slice(2);
-            }
-            str += String.fromCharCode(parseInt(store, 2));
-            i += bytesLength - 1;
-          } else {
-            str += String.fromCharCode(_arr[i]);
-          }
-        }
-        return str;
+      bindCert: function (certId) {
+
       },
 
     },
     computed: {
-      'cert.list': function() {
-        let _this = this;
-        if (this.cert.idList.length > 0 && this.cert.nameList.length > 0) {
-          _this.cert.list = [];
-          this.cert.idList.forEach(function (item, index) {
-            _this.cert.list.push({certId: item, certName: _this.cert.nameList[index]});
-          });
-        }
-        return this.cert.list;
-      }
+
     },
     created: function() {
     },

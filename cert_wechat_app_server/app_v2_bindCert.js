@@ -268,6 +268,16 @@ let abi =
 let contractAddress = "0x6f26b391ebbfc38659f4c15fa8af1883e483d846";	    // 合约地址
 let certContract = new web3.eth.Contract(abi,contractAddress, options);   //调用web3 去获取到合约的对象
 
+let unlockAccount = function () {
+    let unlock = new Promise(function (resolve, reject) {
+        
+        if (!reject)  {
+            resolve();
+        } else {
+            reject();
+        }
+    });
+};
 
 /* region common api */
 // getPastLogs
@@ -384,19 +394,12 @@ app.post("/getCertBytesList",function(req,resp){
 
 
 
+/* region wechat app controller */
+
+/* endregion wechat app controller */
 
 
 
-let unlockAccount = function () {
-    let unlock = new Promise(function (resolve, reject) {
-        
-        if (!reject)  {
-            resolve();
-        } else {
-            reject();
-        }
-    });
-};
 
 
 

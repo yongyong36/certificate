@@ -15,6 +15,11 @@ Page({
       url: '../logs/logs'
     })
   },
+  navToCertList: function () {
+    wx.navigateTo({
+      url: '../cert_list/cert_list'
+    })
+  },
   onLoad: function () {
     if (app.globalData.userInfo) {
       this.setData({

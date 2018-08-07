@@ -1,15 +1,19 @@
 // pages/cert/cert.js
+import Api from "../../api/api";
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    serverName: getApp().globalData.serverName,
     userinfo: {},
+    sensitiveUserData: null,
   },
-  checkSession: function() {
+  checkSession: function () {
     wx.checkSession({
-      success: function() {
+      success: function () {
         console.log('checkSession success')
       },
       fail: function () {
@@ -17,6 +21,31 @@ Page({
         wx.login() //重新登录
       }
     })
+  },
+  getAppid: function () {
+    var _this = this;
+    _this.data.sensitiveUserData = getApp().globalData.sensitiveUserData,
+    console.log(_this.data.sensitiveUserData)
+    if (_this.data.sensitiveUserData) {
+      wx.request({
+        url: _this.data.serverName + '/getAppid', //仅为示例，并非真实的接口地址
+        data: _this.data.sensitiveUserData,
+        method: "POST",
+        dataType: 'json',
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        success: function (res) {
+
+          console.log(res);
+        },
+        fail: function (res) {
+          console.log(res);
+        }
+      })
+    } else {
+      alert("请重新登录");
+    }
   },
 
   /**

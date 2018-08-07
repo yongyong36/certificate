@@ -1,2 +1,8 @@
 <!--pages/cert_list/cert_list.wxml-->
-<text>pages/cert_list/cert_list.wxml</text>
+<view class="container">
+  <text class='title'>pages/cert_list/cert_list.wxml</text>
+
+  <view wx:for="{{certList}}" wx:key="unique" data-certid="{{item.certId}}" bindtap='bindCert'>
+    <text>{{item.certName}}</text>
+  </view>
+</view>

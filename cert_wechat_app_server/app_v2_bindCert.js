@@ -1,6 +1,7 @@
 let express = require('express');
 let bodyParser = require('body-parser');
 let Web3 = require('web3');     //引入web3.js
+let getWechatAppId = require('./controller/getWechatAppIdController');
 
 let app = express();
 // app.configure(function () {
@@ -265,7 +266,7 @@ let abi =
     ]
 ;
 
-let contractAddress = "0x6f26b391ebbfc38659f4c15fa8af1883e483d846";	    // 合约地址
+let contractAddress = "0xf78bb45aaac3bfbba91ea270cb57588e18580a20";	    // 合约地址
 let certContract = new web3.eth.Contract(abi,contractAddress, options);   //调用web3 去获取到合约的对象
 
 let unlockAccount = function () {
@@ -353,35 +354,40 @@ app.post("/getCertBytes",function(req,resp){
 });
 app.post("/getCertBytesList",function(req,resp){
     certContract.methods.getCertBytesIdList().call(function(error,result){
-        // console.log('IdList：', '\n'+result);
+        console.log('IdList：', '\n'+result);
         let certIdList = result;
         let certBytesList = [];
         let certBytesListTmp = [];
-        certIdList.forEach(function (certId, index) {
-            certContract.methods.getCertBytes(certId).call(function(error,result){
-                // 返回的 result：{0: certName, 1: certMeaning}
-                // console.log(result);
-                let certObj = {
-                    certId: 0,
-                    certName: '',
-                    certMeaning: '',
-                };
-                try {
-                    certObj.certId = certId;
-                    certObj.certName = web3.utils.hexToUtf8(result[0]);
-                    certObj.certMeaning = web3.utils.hexToUtf8(result[1]);
-                    certBytesListTmp.push(certObj);
-                } catch (e) {
-                    resp.send({ status: 'error', error: 'catch Something failed!' });
-                }
-    
-                if (certBytesListTmp.length === certIdList.length) {
-                    certBytesList = certBytesListTmp.sort(compareByCertId('certId'));
-                    resp.send({status: 'success', certBytesList: certBytesList});
-                }
+        if (certIdList.length > 0) {
+            certIdList.forEach(function (certId, index) {
+                certContract.methods.getCertBytes(certId).call(function(error,result){
+                    // 返回的 result：{0: certName, 1: certMeaning}
+                    // console.log(result);
+                    let certObj = {
+                        certId: 0,
+                        certName: '',
+                        certMeaning: '',
+                    };
+                    try {
+                        certObj.certId = certId;
+                        certObj.certName = web3.utils.hexToUtf8(result[0]);
+                        certObj.certMeaning = web3.utils.hexToUtf8(result[1]);
+                        certBytesListTmp.push(certObj);
+                    } catch (e) {
+                        resp.send({ status: 'error', error: 'catch Something failed!' });
+                    }
+            
+                    if (certBytesListTmp.length === certIdList.length) {
+                        certBytesList = certBytesListTmp.sort(compareByCertId('certId'));
+                        resp.send({status: 'success', certBytesList: certBytesList});
+                    }
+                });
+        
             });
+        } else {
+            resp.send({status: 'success', certBytesList: certBytesList});
     
-        });
+        }
         
         
         
@@ -389,13 +395,25 @@ app.post("/getCertBytesList",function(req,resp){
     });
     
 });
-
 /* endregion certificate api */
 
 
 
-/* region wechat app controller */
 
+/* region wechat app controller */
+app.post("/getAppid", function (req, resp) {
+    console.log(req.body);
+    let data = {
+        // sessionKey: req.body.sessionKey,
+        encryptedData: req.body.encryptedData,
+        iv: req.body.iv,
+    };
+    
+    
+    let result = getWechatAppId(data.sessionKey, data.encryptedData, data.iv);
+    console.log(result);
+    resp.send(result);
+});
 /* endregion wechat app controller */
 
 

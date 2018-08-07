@@ -238,7 +238,7 @@ let abi =
 ;
 
 
-let contractAddress = "0x6f26b391ebbfc38659f4c15fa8af1883e483d846";		// 合约地址
+let contractAddress = "0xf78bb45aaac3bfbba91ea270cb57588e18580a20";		// 合约地址
 let myContract = web3.eth.contract(abi);
 let certContract = myContract.at(contractAddress);
 

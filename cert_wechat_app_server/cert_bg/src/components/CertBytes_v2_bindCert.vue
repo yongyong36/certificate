@@ -11,6 +11,12 @@
       <label for="cert_bytes_meaning">cert_meaning</label>
       <input type="text" name="certMeaning" id="cert_bytes_meaning" value="傻证" v-model="certBytes.certMeaning"><br>
 
+      <label for="cert_bytes_couple">cert_isCouple</label>
+      <select name="certCouple" id="cert_bytes_couple" v-model="certBytes.certCouple">
+        <option value="true">是</option>
+        <option value="false">否</option>
+      </select><br>
+
       <label></label>
       <button @click="addCertBytes()">addCertBytes</button>
     </div>
@@ -107,6 +113,10 @@
           },
           {
             "name": "_certMeaning",
+            "type": "bytes"
+          },
+          {
+            "name": "_isCouple",
             "type": "bytes"
           }
         ],
@@ -224,6 +234,10 @@
           {
             "name": "",
             "type": "bytes"
+          },
+          {
+            "name": "",
+            "type": "bytes"
           }
         ],
         "payable": false,
@@ -274,7 +288,7 @@
       }
     ]
   ;
-  let contractAddress = "0xf78bb45aaac3bfbba91ea270cb57588e18580a20";		// 合约地址
+  let contractAddress = "0x5426c464eaf9fd91dadc177b32ca84538db59f30";		// 合约地址
   let myContract = web3.eth.contract(abi);
   let certContract = myContract.at(contractAddress);
 
@@ -349,6 +363,7 @@
           certId: 1,
           certName: 'aaaaa',
           certMeaning: '水电费',
+          certCouple: true,
           list: [],
           idList: [],
           nameList: [],
@@ -359,13 +374,14 @@
     // http: { headers: {'Content-Type': 'application/x-www-form-urlencoded'} },
     methods: {
       addCertBytes: function() {
-        // console.log(this.certBytes.certName, this.certBytes.certMeaning);
+        console.log(this.certBytes.certName, this.certBytes.certMeaning, this.certBytes.certCouple);
         let data = {
           certName: this.certBytes.certName,
           certMeaning: this.certBytes.certMeaning,
+          certCouple: this.certBytes.certCouple,
         };
         unlockAccount().then(function () {
-          console.log('unlock true', data.certName, data.certMeaning); //, certContract
+          console.log('unlock true'); //, certContract
           Vue.http.post('http://127.0.0.1:3000/addCertBytes', data)
             .then((resp) => {
               console.log(resp.data);
@@ -443,10 +459,7 @@
 <style scoped>
   * {
     font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+
   }
   *:focus {
     outline: none;
@@ -461,6 +474,10 @@
     border: none;
     color: #2c3e50;
     cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   label {
     display: inline-block;
@@ -469,6 +486,10 @@
     text-align: right;
   }
   input {
+    padding: 5px 10px;
+    margin: 0 5px 10px 5px;
+  }
+  select {
     padding: 5px 10px;
     margin: 0 5px 10px 5px;
   }

@@ -10,6 +10,18 @@ App({
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        // console.log('app login', res)
+        wx.request({
+          url: this.globalData.serverName + '/storageCode',
+          method: "POST",
+          data: res,
+          success: function(res) {
+            // console.log('app storageCode', res);
+          },
+          fail: function(res) {
+            console.log(res)
+          }
+        })
       }
     })
     // 获取用户信息

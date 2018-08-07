@@ -1,6 +1,7 @@
 <!--pages/cert/cert.wxml-->
 <view class="container">
   <text>pages/cert/cert.wxml</text>
+
   <button bindtap="checkSession">checkSession</button> 
   <button bindtap="getAppid">getAppid</button> 
 </view>

@@ -1,6 +1,6 @@
 // pages/cert/cert.js
 import Api from "../../api/api";
-
+var app = getApp();
 Page({
 
   /**
@@ -8,8 +8,9 @@ Page({
    */
   data: {
     serverName: getApp().globalData.serverName,
-    userinfo: {},
+    userInfo: null,
     sensitiveUserData: null,
+    certId: 0,
   },
   checkSession: function () {
     wx.checkSession({
@@ -24,27 +25,25 @@ Page({
   },
   getAppid: function () {
     var _this = this;
-    _this.data.sensitiveUserData = getApp().globalData.sensitiveUserData,
-    console.log(_this.data.sensitiveUserData)
-    if (_this.data.sensitiveUserData) {
+    console.log(this.data.sensitiveUserData)
+    if (this.data.sensitiveUserData) {
       wx.request({
-        url: _this.data.serverName + '/getAppid', //仅为示例，并非真实的接口地址
-        data: _this.data.sensitiveUserData,
+        url: this.data.serverName + '/getSensitiveData', //仅为示例，并非真实的接口地址
+        data: this.data.sensitiveUserData,
         method: "POST",
         dataType: 'json',
         header: {
           'content-type': 'application/json' // 默认值
         },
         success: function (res) {
-
-          console.log(res);
+          console.log(res.data);
         },
         fail: function (res) {
           console.log(res);
         }
       })
     } else {
-      alert("请重新登录");
+      console.log("请重新登录");
     }
   },
 
@@ -52,18 +51,24 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    wx.getUserInfo({
-      success: function(res) {
-        console.log(res);
-      }
-    })
+    // console.log(options)
+    var _this = this;
+    app.userInfoReadyCallback = function () {
+      _this.setData({
+        userInfo: app.globalData.userInfo,
+        sensitiveUserData: app.globalData.sensitiveUserData,
+        certId: options.certId
+      })
+    }
+    console.log(this.data.userInfo);
+    
+    
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
-
+  onReady: function () {
   },
 
   /**
@@ -105,6 +110,10 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
-
+    console.log(this.data)
+    return {
+      title: this.data.userInfo.nickName + '自定义转发标题',
+      path: '/index/index?id=123'
+    }
   }
 })

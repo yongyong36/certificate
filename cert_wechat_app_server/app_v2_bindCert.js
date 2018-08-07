@@ -1,7 +1,11 @@
 let express = require('express');
 let bodyParser = require('body-parser');
+let request = require('request');
 let Web3 = require('web3');     //引入web3.js
 let getWechatAppId = require('./controller/getWechatAppIdController');
+
+let appId = "wx0e88c5996198a2f4";
+let appSecret = "2e9a2be7fd9c54222a5a7bde94ac1e89";
 
 let app = express();
 // app.configure(function () {
@@ -98,6 +102,10 @@ let abi =
                 },
                 {
                     "name": "_certMeaning",
+                    "type": "bytes"
+                },
+                {
+                    "name": "_isCouple",
                     "type": "bytes"
                 }
             ],
@@ -215,6 +223,10 @@ let abi =
                 {
                     "name": "",
                     "type": "bytes"
+                },
+                {
+                    "name": "",
+                    "type": "bytes"
                 }
             ],
             "payable": false,
@@ -266,7 +278,7 @@ let abi =
     ]
 ;
 
-let contractAddress = "0xf78bb45aaac3bfbba91ea270cb57588e18580a20";	    // 合约地址
+let contractAddress = "0x5426c464eaf9fd91dadc177b32ca84538db59f30";	    // 合约地址
 let certContract = new web3.eth.Contract(abi,contractAddress, options);   //调用web3 去获取到合约的对象
 
 let unlockAccount = function () {
@@ -303,11 +315,14 @@ app.post("/addCertBytes",function(req,resp){
     console.log('addCertBytes body', req.body);
     
     let params = {
-        certName: web3.utils.utf8ToHex(req.body.certName),  // 参数 utf8 转 hex 再提交
-        certMeaning: web3.utils.utf8ToHex(req.body.certMeaning),
+        certName: web3.utils.utf8ToHex(req.body.certName.toString()),  // 参数 utf8 转 hex 再提交
+        certMeaning: web3.utils.utf8ToHex(req.body.certMeaning.toString()),
+        certCouple: web3.utils.utf8ToHex(req.body.certCouple.toString()),
     };
     
-    certContract.methods.addCertBytes(params.certName, params.certMeaning)
+    console.log(req.body.certCouple, params.certCouple);
+    
+    certContract.methods.addCertBytes(params.certName, params.certMeaning, params.certCouple)
         .send(options, function(error,result){
             console.log('result', error, result);    //返回32字节的交易哈希值
             resp.send(result);
@@ -338,17 +353,17 @@ app.post("/getCertBytes",function(req,resp){
                     certObj.certId = certId;
                     certObj.certName = web3.utils.hexToUtf8(result[0]);
                     certObj.certMeaning = web3.utils.hexToUtf8(result[1]);
-                    resp.send({status: 'success', certObj: certObj});
+                    resp.send({status: 'success', message: "", certObj: certObj});
                 } else {
-                    resp.send({ status: 'error', error: 'Something failed! result is null' });
+                    resp.send({ status: 'error', errorMsg: 'Something failed! result is null' });
                 }
             } catch (e) {
-                resp.send({ status: 'error', error: 'catch Something failed! result is null' });
+                resp.send({ status: 'error', errorMsg: 'catch Something failed! result is null' });
             }
             
         });
     } else {
-        resp.send({ status: 'error', error: 'certId is required' });
+        resp.send({ status: 'error', errorMsg: 'certId is required' });
     }
     
 });
@@ -359,33 +374,39 @@ app.post("/getCertBytesList",function(req,resp){
         let certBytesList = [];
         let certBytesListTmp = [];
         if (certIdList.length > 0) {
-            certIdList.forEach(function (certId, index) {
-                certContract.methods.getCertBytes(certId).call(function(error,result){
-                    // 返回的 result：{0: certName, 1: certMeaning}
-                    // console.log(result);
-                    let certObj = {
-                        certId: 0,
-                        certName: '',
-                        certMeaning: '',
-                    };
-                    try {
+            try {
+                certIdList.forEach(function (certId, index) {
+                    certContract.methods.getCertBytes(certId).call(function(error,result){
+                        // 返回的 result：{0: certName, 1: certMeaning}
+                        console.log('result', result);
+                        let certObj = {
+                            certId: 0,
+                            certName: '',
+                            certMeaning: '',
+                            certCouple: '',
+                        };
+                        try {
                         certObj.certId = certId;
                         certObj.certName = web3.utils.hexToUtf8(result[0]);
                         certObj.certMeaning = web3.utils.hexToUtf8(result[1]);
+                        certObj.certCouple = web3.utils.hexToUtf8(result[2]);
                         certBytesListTmp.push(certObj);
-                    } catch (e) {
-                        resp.send({ status: 'error', error: 'catch Something failed!' });
-                    }
+                        } catch (e) {
+                            resp.send({ status: 'error', errorMsg: 'catch Something failed!' });
+                        }
             
-                    if (certBytesListTmp.length === certIdList.length) {
-                        certBytesList = certBytesListTmp.sort(compareByCertId('certId'));
-                        resp.send({status: 'success', certBytesList: certBytesList});
-                    }
-                });
+                        if (certBytesListTmp.length === certIdList.length) {
+                            certBytesList = certBytesListTmp.sort(compareByCertId('certId'));
+                            resp.send({status: 'success', message: "", certBytesList: certBytesList});
+                        }
+                    });
         
-            });
+                });
+            } catch(e) {
+                resp.send({ status: 'error', errorMsg: 'catch Something failed!' });
+            }
         } else {
-            resp.send({status: 'success', certBytesList: certBytesList});
+            resp.send({status: 'success', message: "", certBytesList: certBytesList});
     
         }
         
@@ -401,20 +422,44 @@ app.post("/getCertBytesList",function(req,resp){
 
 
 /* region wechat app controller */
-app.post("/getAppid", function (req, resp) {
-    console.log(req.body);
-    let data = {
-        // sessionKey: req.body.sessionKey,
-        encryptedData: req.body.encryptedData,
-        iv: req.body.iv,
-    };
-    
-    
-    let result = getWechatAppId(data.sessionKey, data.encryptedData, data.iv);
+let ssKey = {};
+app.post("/storageCode", function (req, resp) {
+    // console.log(req.body);
+    request('https://api.weixin.qq.com/sns/jscode2session?appid='+ appId + '&secret=' + appSecret + '&js_code=' + req.body.code + '&grant_type=authorization_code'
+        , function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            let bodyTmp = JSON.parse(body);
+            ssKey = {session_key: bodyTmp.session_key, openid: bodyTmp.openid};
+            resp.send({status: 'success', message: "storageCode success",});
+        }
+    })
+});
+
+app.post("/getSensitiveData", function (req, resp) {
+    // console.log(req.body);
+    let result = {};
+    let sensitiveData = {};
+    if (ssKey.session_key && req.body.encryptedData && req.body.iv) {
+        sensitiveData = getWechatAppId(appId, ssKey.session_key, req.body.encryptedData, req.body.iv);
+        console.log('sensitiveData', sensitiveData);
+        result = {status: 'success', message: 'sensitiveData success'};
+    } else {
+        result = {status: 'error', errorMsg: '请求参数错误'};
+    }
     console.log(result);
     resp.send(result);
 });
 /* endregion wechat app controller */
+
+
+app.post("/bindCert", function (req, resp) {
+    // console.log(req.body);
+    let result = {};
+    
+    
+    console.log(result);
+    resp.send(result);
+});
 
 
 

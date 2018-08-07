@@ -10,8 +10,13 @@ Page({
     certList: [],
   },
   bindCert: function (event) {
-    // console.log(event);
-    console.log(event.currentTarget.dataset.certid);
+    wx.navigateTo({
+      url: '../cert/cert?certid=' + event.currentTarget.dataset.certid,
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+    // console.log(event.currentTarget.dataset.certid);
   },
 
   /**
@@ -33,11 +38,11 @@ Page({
       },
       method: 'POST',
       success: function (res) {
-        console.log(res)
+        // console.log(res.data)
         _this.setData({
           certList: res.data.certBytesList
         })
-        console.log(_this.data.certList);
+        // console.log(_this.data.certList);
       }
     })
   },

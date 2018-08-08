@@ -11,12 +11,14 @@ Page({
   },
   bindCert: function (event) {
     wx.navigateTo({
-      url: '../cert/cert?certid=' + event.currentTarget.dataset.certid,
+      url: '../cert/cert?certId=' + event.currentTarget.dataset.certId 
+        + '&certName=' + event.currentTarget.dataset.certName
+        + '&certMeaning=' + event.currentTarget.dataset.certMeaning,
       success: function(res) {},
       fail: function(res) {},
       complete: function(res) {},
     })
-    // console.log(event.currentTarget.dataset.certid);
+    // console.log('cert_list bindCert certid', event.currentTarget.dataset.certid);
   },
 
   /**
@@ -32,17 +34,17 @@ Page({
   onReady: function () {
     var _this = this;
     wx.request({
-      url: _this.data.serverName + '/getCertBytesList', //仅为示例，并非真实的接口地址
+      url: this.data.serverName + '/getCertBytesList', //仅为示例，并非真实的接口地址
       header: {
         'content-type': 'application/json' // 默认值
       },
       method: 'POST',
       success: function (res) {
-        // console.log(res.data)
+        // console.log('cert_list /getCertBytesList res.data', res.data)
         _this.setData({
           certList: res.data.certBytesList
         })
-        // console.log(_this.data.certList);
+        console.log('cert_list getCertBytesList certList', _this.data.certList);
       }
     })
   },

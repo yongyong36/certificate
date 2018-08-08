@@ -12,3 +12,6 @@
 button {
   margin-bottom: 10rpx;
 }
+.block {
+  margin-bottom: 15rpx;
+}

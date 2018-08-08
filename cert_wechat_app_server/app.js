@@ -6,10 +6,12 @@ let express = require('express');
 let bodyParser = require('body-parser');
 let request = require('request');
 let Web3 = require('web3');     //引入web3.js
-let getWechatAppId = require('./controller/getWechatAppIdController');
+let getSensitiveData = require('./controller/getWechatAppIdController');
 
-let appId = "wx0e88c5996198a2f4";
-let appSecret = "2e9a2be7fd9c54222a5a7bde94ac1e89";
+// let appId = "wx0e88c5996198a2f4";
+// let appSecret = "2e9a2be7fd9c54222a5a7bde94ac1e89";
+let appId = "wxc1d05bb93e18391d";
+let appSecret = "1f2fab3c591b6e8fe1006aa49c15c00c";
 
 let app = express();
 // app.configure(function () {
@@ -335,7 +337,7 @@ app.post("/addCertBytes",function(req,resp){
 app.get("/getCertBytesIdList",function(req,resp){
     // resp.send(certList);
     certContract.methods.getCertBytesIdList().call(function(error,result){
-        console.log('IdList：', '\n'+result);
+        console.log('IdList：', result);
         resp.send(result);
     });
 });
@@ -375,7 +377,7 @@ app.post("/getCertBytes",function(req,resp){
 });
 app.post("/getCertBytesList",function(req,resp){
     certContract.methods.getCertBytesIdList().call(function(error,result){
-        console.log('IdList：', '\n'+result);
+        console.log('IdList：', result);
         let certIdList = result;
         let certBytesList = [];
         let certBytesListTmp = [];
@@ -431,26 +433,35 @@ app.post("/storageCode", function (req, resp) {
         , function (error, response, body) {
         if (!error && response.statusCode === 200) {
             let bodyTmp = JSON.parse(body);
-            ssKey = {session_key: bodyTmp.session_key, openid: bodyTmp.openid};
-            console.log('storageCode and get openid sskey unioniid');
-            resp.send({status: 'success', message: "storageCode success",});
+            ssKey = {session_key: bodyTmp.session_key, openid: bodyTmp.openid, unionId: bodyTmp.unionId};
+            console.log('storageCode and get openid sskey unionid: ' + body);
+            resp.send({status: 'success', message: "storageCode success", unionId: bodyTmp.unionid});
         }
     })
 });
-app.post("/getSensitiveData", function (req, resp) {
-    // console.log(req.body);
-    let result = {};
-    let sensitiveData = {};
-    if (ssKey.session_key && req.body.encryptedData && req.body.iv) {
-        sensitiveData = getWechatAppId(appId, ssKey.session_key, req.body.encryptedData, req.body.iv);
-        console.log('sensitiveData', sensitiveData);
-        result = {status: 'success', message: 'sensitiveData success'};
-    } else {
-        result = {status: 'error', errorMsg: '请求参数错误'};
-    }
-    console.log(result);
-    resp.send(result);
-});
+// app.post("/getUnionId", function (req, resp) {
+//     // console.log(req.body);
+//     let result = {};
+//     let sensitiveData = {};
+//     console.log('ssKey: '+ssKey.session_key+';  encryptedData: '+req.body.encryptedData+';  iv: '+ req.body.iv);
+//     if (ssKey.session_key && req.body.encryptedData && req.body.iv) {
+//         /* 偶尔会有buffer出错，未知原因 */
+//         sensitiveData = getSensitiveData(appId, ssKey.session_key, req.body.encryptedData, req.body.iv);
+//         console.log('sensitiveData', sensitiveData);
+//         result = {status: 'success', message: 'sensitiveData success', unionId: sensitiveData.unionId};
+//         // try {
+//         //     sensitiveData = getSensitiveData(appId, ssKey.session_key, req.body.encryptedData, req.body.iv);
+//         //     console.log('sensitiveData', sensitiveData);
+//         //     result = {status: 'success', message: 'sensitiveData success'};
+//         // } catch(e) {
+//         //     result = {status: 'error', errorMsg: '请求失败'};
+//         // }
+//     } else {
+//         result = {status: 'error', errorMsg: '请求参数错误'};
+//     }
+//     console.log(result);
+//     resp.send(result);
+// });
 /* endregion wechat app api */
 
 

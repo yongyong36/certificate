@@ -7,28 +7,28 @@ Page({
    * 页面的初始数据
    */
   data: {
-    serverName: getApp().globalData.serverName,
+    pageProps: null,
+    serverName: app.globalData.serverName,
     userInfo: null,
-    sensitiveUserData: null,
+    unionId: 0,
     certId: 0,
   },
   checkSession: function () {
     wx.checkSession({
       success: function () {
-        console.log('checkSession success')
+        console.log('cert checkSession success')
       },
       fail: function () {
-        console.log('checkSession fail')
+        console.log('cert checkSession fail')
         wx.login() //重新登录
       }
     })
   },
-  getAppid: function () {
-    var _this = this;
-    console.log(this.data.sensitiveUserData)
+  getUnionId: function () {
+    console.log('cert getUnionId')
     if (this.data.sensitiveUserData) {
       wx.request({
-        url: this.data.serverName + '/getSensitiveData', //仅为示例，并非真实的接口地址
+        url: this.data.serverName + '/getUnionId', //仅为示例，并非真实的接口地址
         data: this.data.sensitiveUserData,
         method: "POST",
         dataType: 'json',
@@ -36,53 +36,29 @@ Page({
           'content-type': 'application/json' // 默认值
         },
         success: function (res) {
-          console.log(res.data);
+          console.log('cert ', res.data);
         },
         fail: function (res) {
-          console.log(res);
+          console.log('cert ', res);
         }
       })
     } else {
-      console.log("请重新登录");
-
+      console.log("cert 请重新登录");
     }
   },
-  login: function() {
-    wx.login({
-      success: res => {
-        // console.log('app login', res)
-        wx.request({
-          url: this.globalData.serverName + '/storageCode',
-          method: "POST",
-          data: res,
-          success: function (res) {
-            // console.log('app storageCode', res);
-          },
-          fail: function (res) {
-            console.log(res)
-          }
-        })
-      }
-    })
-  },
-
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    // console.log(options)
-    var _this = this;
-    app.userInfoReadyCallback = function () {
-      this.data.userInfo = app.globalData.userInfo,
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        sensitiveUserData: app.globalData.sensitiveUserData,
-        certId: options.certId
-      })
-      console.log(app.globalData.userInfo, this.data.userInfo);
-    }
-    
-    
+    console.log('cert onLoad options', options)
+    this.setData({
+      pageProps: options,
+      userInfo: app.globalData.userInfo,
+      unionId: app.globalData.unionId,
+      // sensitiveUserData: app.globalData.sensitiveUserData,
+      certId: options.certId
+    })
+    console.log('cert onLoad this.data', this.data)
   },
 
   /**
@@ -130,10 +106,10 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
-    console.log(this.data)
+    console.log('cert onShareAppMessage', this.data)
     return {
-      title: this.data.userInfo.nickName + '自定义转发标题',
-      path: '/index/index?id=123'
+      title: this.data.userInfo.nickName + '向你发出了一个婚礼猫'+ this.data.pageProps.certMeaning+'证领取邀请',
+      path: 'pages/cert_share/cert_share?certId=' + this.data.pageProps.certId + 'invitedId=' + this.data.unionId,
     }
   }
 })

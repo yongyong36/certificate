@@ -1,20 +1,22 @@
+/*
+* app_v1.js
+*
+* */
 let express = require('express');
 let bodyParser = require('body-parser');
-let request = require('request');
+var url = require('url');
+// let qs = require('querystring');
 let Web3 = require('web3');     //引入web3.js
-let getWechatAppId = require('./controller/getWechatAppIdController');
+// let Eth = require('web3-eth');
 
-let appId = "wx0e88c5996198a2f4";
-let appSecret = "2e9a2be7fd9c54222a5a7bde94ac1e89";
-
-let app = express();
+let app_v1 = express();
 // app.configure(function () {
 //     app.use(express.bodyParser({ keepExtensions: true, uploadDir: '/tmp' }));
 // });
-app.use(express.static('page'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.all('*', function(req, res, next) {
+app_v1.use(express.static('page'));
+app_v1.use(bodyParser.urlencoded({ extended: false }));
+app_v1.use(bodyParser.json());
+app_v1.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     // res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
     res.header("Access-Control-Allow-Headers", "*");
@@ -26,8 +28,25 @@ app.all('*', function(req, res, next) {
     else next();
 });
 
+/* route */
+app_v1.get('/', function(req, res){
+    res.sendFile( __dirname + "/page/html/" + "index.html");
+});
+app_v1.get('/cert', function(req, res){
+    res.sendFile( __dirname + "/page/html/" + "cert.html");
+});
+app_v1.get('/msg', function(req, res){
+    res.sendFile( __dirname + "/page/html/" + "msg.html");
+});
+
 
 /* web3 init */
+// let web3;
+// if (typeof web3 !== 'undefined') {
+//     web3 = new Web3(web3.currentProvider);
+// } else {
+//     web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+// }
 let web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 // let web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.2.68:8545"));
 // let web3 = new Web3(new Web3.providers.HttpProvider("http://192.168.2.53:4444"));
@@ -102,10 +121,6 @@ let abi =
                 },
                 {
                     "name": "_certMeaning",
-                    "type": "bytes"
-                },
-                {
-                    "name": "_isCouple",
                     "type": "bytes"
                 }
             ],
@@ -223,10 +238,6 @@ let abi =
                 {
                     "name": "",
                     "type": "bytes"
-                },
-                {
-                    "name": "",
-                    "type": "bytes"
                 }
             ],
             "payable": false,
@@ -278,23 +289,17 @@ let abi =
     ]
 ;
 
-let contractAddress = "0x5426c464eaf9fd91dadc177b32ca84538db59f30";	    // 合约地址
+let contractAddress = "0xf267bbf9f70e907262d893139c35252ebd9fcf8a";	    // 合约地址
 let certContract = new web3.eth.Contract(abi,contractAddress, options);   //调用web3 去获取到合约的对象
 
-let unlockAccount = function () {
-    let unlock = new Promise(function (resolve, reject) {
-        
-        if (!reject)  {
-            resolve();
-        } else {
-            reject();
-        }
-    });
-};
+// let eth = new Eth(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+// let balance = web3.eth.getBalance(coinbase);
+// console.log(certContract.methods);
+
 
 /* region common api */
 // getPastLogs
-app.get("/getPastLogs",function(req,resp){
+app_v1.get("/getPastLogs",function(req, resp){
     let options = {fromBlock: 0, toBlock: 'latest', address: coinbase};
     web3.eth.getPastLogs(options, function(logs) {
         resp.send(logs);
@@ -310,32 +315,72 @@ app.get("/getPastLogs",function(req,resp){
 
 
 
+
 /* region certificate api */
-app.post("/addCertBytes",function(req,resp){
+
+/* cert api */
+// app.get("/getCertList",function(req,resp){
+//     // resp.send(certList);
+//     certContract.methods.getCertNameList().call(function(error,result){
+//         resp.send(result);
+//     });
+// });
+app_v1.get("/getCertIdList",function(req, resp){
+    // resp.send(certList);
+    certContract.methods.getCertIdList().call(function(error,result){
+        console.log('IdList：', '\n'+result);
+        resp.send(result);
+    });
+});
+// app.get("/getCertNameList",function(req,resp){
+    // resp.send(certList);
+    // certContract.methods.getCertNameList().call(options, function(error,result){
+    //     console.log('NameList：', '\n'+error, '\n'+result);
+    //     resp.send(result);
+    // });
+    // certContract.methods.getCertNameList().call(options).then(function(error, result){
+    //     console.log('NameList：', '\n'+error, '\n'+result);
+    // });
+// });
+app_v1.post("/addCert",function(req, resp){
+    console.log(req.body);
+    certContract.methods.addCert(req.body.certName, req.body.certMeaning)
+        .send(options, function(error,result){
+        console.log('result', error, result);    //返回32字节的交易哈希值
+        resp.send(result);
+    })
+});
+app_v1.get("/getCert",function(req, resp){
+    console.log(req.body);
+    certContract.methods.getCert().call(function(error,result){
+        resp.send(result);
+    });
+});
+
+
+/* cert bytes api */
+app_v1.post("/addCertBytes",function(req, resp){
     console.log('addCertBytes body', req.body);
     
     let params = {
-        certName: web3.utils.utf8ToHex(req.body.certName.toString()),  // 参数 utf8 转 hex 再提交
-        certMeaning: web3.utils.utf8ToHex(req.body.certMeaning.toString()),
-        certCouple: web3.utils.utf8ToHex(req.body.certCouple.toString()),
+        certName: web3.utils.utf8ToHex(req.body.certName),  // 参数 utf8 转 hex 再提交
+        certMeaning: web3.utils.utf8ToHex(req.body.certMeaning),
     };
     
-    console.log(req.body.certCouple, params.certCouple);
-    
-    certContract.methods.addCertBytes(params.certName, params.certMeaning, params.certCouple)
+    certContract.methods.addCertBytes(params.certName, params.certMeaning)
         .send(options, function(error,result){
             console.log('result', error, result);    //返回32字节的交易哈希值
             resp.send(result);
         })
 });
-app.get("/getCertBytesIdList",function(req,resp){
+app_v1.get("/getCertBytesIdList",function(req, resp){
     // resp.send(certList);
     certContract.methods.getCertBytesIdList().call(function(error,result){
         console.log('IdList：', '\n'+result);
         resp.send(result);
     });
 });
-app.post("/getCertBytes",function(req,resp){
+app_v1.post("/getCertBytes",function(req, resp){
     console.log(req.body);
     let certId = parseInt(req.body.certId);
     
@@ -353,62 +398,51 @@ app.post("/getCertBytes",function(req,resp){
                     certObj.certId = certId;
                     certObj.certName = web3.utils.hexToUtf8(result[0]);
                     certObj.certMeaning = web3.utils.hexToUtf8(result[1]);
-                    resp.send({status: 'success', message: "", certObj: certObj});
+                    resp.send({status: 'success', certObj: certObj});
                 } else {
-                    resp.send({ status: 'error', errorMsg: 'Something failed! result is null' });
+                    resp.send({ status: 'error', error: 'Something failed! result is null' });
                 }
             } catch (e) {
-                resp.send({ status: 'error', errorMsg: 'catch Something failed! result is null' });
+                resp.send({ status: 'error', error: 'catch Something failed! result is null' });
             }
             
         });
     } else {
-        resp.send({ status: 'error', errorMsg: 'certId is required' });
+        resp.send({ status: 'error', error: 'certId is required' });
     }
     
 });
-app.post("/getCertBytesList",function(req,resp){
+app_v1.post("/getCertBytesList",function(req, resp){
     certContract.methods.getCertBytesIdList().call(function(error,result){
-        console.log('IdList：', '\n'+result);
+        // console.log('IdList：', '\n'+result);
         let certIdList = result;
         let certBytesList = [];
         let certBytesListTmp = [];
-        if (certIdList.length > 0) {
-            try {
-                certIdList.forEach(function (certId, index) {
-                    certContract.methods.getCertBytes(certId).call(function(error,result){
-                        // 返回的 result：{0: certName, 1: certMeaning}
-                        console.log('result', result);
-                        let certObj = {
-                            certId: 0,
-                            certName: '',
-                            certMeaning: '',
-                            certCouple: '',
-                        };
-                        try {
-                        certObj.certId = certId;
-                        certObj.certName = web3.utils.hexToUtf8(result[0]);
-                        certObj.certMeaning = web3.utils.hexToUtf8(result[1]);
-                        certObj.certCouple = web3.utils.hexToUtf8(result[2]);
-                        certBytesListTmp.push(certObj);
-                        } catch (e) {
-                            resp.send({ status: 'error', errorMsg: 'catch Something failed!' });
-                        }
-            
-                        if (certBytesListTmp.length === certIdList.length) {
-                            certBytesList = certBytesListTmp.sort(compareByCertId('certId'));
-                            resp.send({status: 'success', message: "", certBytesList: certBytesList});
-                        }
-                    });
-        
-                });
-            } catch(e) {
-                resp.send({ status: 'error', errorMsg: 'catch Something failed!' });
-            }
-        } else {
-            resp.send({status: 'success', message: "", certBytesList: certBytesList});
+        certIdList.forEach(function (certId, index) {
+            certContract.methods.getCertBytes(certId).call(function(error,result){
+                // 返回的 result：{0: certName, 1: certMeaning}
+                // console.log(result);
+                let certObj = {
+                    certId: 0,
+                    certName: '',
+                    certMeaning: '',
+                };
+                try {
+                    certObj.certId = certId;
+                    certObj.certName = web3.utils.hexToUtf8(result[0]);
+                    certObj.certMeaning = web3.utils.hexToUtf8(result[1]);
+                    certBytesListTmp.push(certObj);
+                } catch (e) {
+                    resp.send({ status: 'error', error: 'catch Something failed!' });
+                }
     
-        }
+                if (certBytesListTmp.length === certIdList.length) {
+                    certBytesList = certBytesListTmp.sort(compareByCertId('certId'));
+                    resp.send({status: 'success', certBytesList: certBytesList});
+                }
+            });
+    
+        });
         
         
         
@@ -416,58 +450,71 @@ app.post("/getCertBytesList",function(req,resp){
     });
     
 });
+
 /* endregion certificate api */
 
 
 
 
-/* region wechat app controller */
-let ssKey = {};
-app.post("/storageCode", function (req, resp) {
-    // console.log(req.body);
-    request('https://api.weixin.qq.com/sns/jscode2session?appid='+ appId + '&secret=' + appSecret + '&js_code=' + req.body.code + '&grant_type=authorization_code'
-        , function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            let bodyTmp = JSON.parse(body);
-            ssKey = {session_key: bodyTmp.session_key, openid: bodyTmp.openid};
-            resp.send({status: 'success', message: "storageCode success",});
+
+
+let unlockAccount = function () {
+    let unlock = new Promise(function (resolve, reject) {
+        
+        if (!reject)  {
+            resolve();
+        } else {
+            reject();
         }
+    });
+};
+
+
+
+
+/* region message api */
+// set
+app_v1.post("/setMessage",function(req, resp){
+    console.log(req.body);
+    let options = {
+        from: coinbase,
+    };
+    // console.log(certContract.methods.setMsg(req.body.str).encodeABI());
+    certContract.methods.setMsg(req.body.str).send(options, function(error,result){
+        console.log('result', error, result);    //返回32字节的交易哈希值
+        resp.send(result);
     })
-});
-
-app.post("/getSensitiveData", function (req, resp) {
-    // console.log(req.body);
-    let result = {};
-    let sensitiveData = {};
-    if (ssKey.session_key && req.body.encryptedData && req.body.iv) {
-        sensitiveData = getWechatAppId(appId, ssKey.session_key, req.body.encryptedData, req.body.iv);
-        console.log('sensitiveData', sensitiveData);
-        result = {status: 'success', message: 'sensitiveData success'};
-    } else {
-        result = {status: 'error', errorMsg: '请求参数错误'};
-    }
-    console.log(result);
-    resp.send(result);
-});
-/* endregion wechat app controller */
-
-
-app.post("/bindCert", function (req, resp) {
-    // console.log(req.body);
-    let result = {};
+    /*.on('receipt', function(receipt) {
+        // 交易收据有效时触发 Object
+        console.log('receipt',receipt);
+    })
+    .on('transactionHash', function(hash){
+        //交易发送后得到有效交易哈希值时触发 String
+        console.log('transactionHash',hash);
+    })
+    .on('confirmation', function(confirmationNumber, receipt){
+        // 收到确认时触发 Number
+        console.log('confirmation',confirmationNumber, receipt);
+    })*/;
     
-    
-    console.log(result);
-    resp.send(result);
 });
 
-
-
-
+// get
+app_v1.get("/getMessage",function(req, resp){
+    let msg = certContract.methods.getMsg().call(function(error,result){
+        console.log(error, result);
+        resp.send(result);
+    });
+    // msg.then(function(result) {
+    //     console.log('result', result);
+    // });
+    // console.log(msg);
+    
+});
 
 
 /* server listener */
-let server = app.listen(3000, function() {
+let server = app_v1.listen(3000, function() {
     let host = server.address().address;
     let port = server.address().port;
     console.log(host, port);
@@ -487,6 +534,7 @@ function getGas() {
     
 }
 
+
 function compareByCertId(property) {
     return function(obj1,obj2){
         let value1 = obj1[property];
@@ -495,6 +543,87 @@ function compareByCertId(property) {
         return value1 - value2;     // 升序
     }
 }
+
+
+/* bytes string 互转 */
+// 十六进制
+function strToHexCharCode(str) {
+    if(str === "")
+        return "";
+    let hexCharCode = [];
+    hexCharCode.push("0x");
+    for(let i = 0; i < str.length; i++) {
+        hexCharCode.push((str.charCodeAt(i)).toString(16));
+    }
+    return hexCharCode.join("");
+}
+function hexCharCodeToStr(hexCharCodeStr) {
+    let trimedStr = hexCharCodeStr.trim();
+    let rawStr = trimedStr.substr(0,2).toLowerCase() === "0x" ? trimedStr.substr(2) : trimedStr;
+    let len = rawStr.length;
+    if(len % 2 !== 0) {
+        alert("Illegal Format ASCII Code!");
+        return "";
+    }
+    let curCharCode;
+    let resultStr = [];
+    for(let i = 0; i < len;i = i + 2) {
+        curCharCode = parseInt(rawStr.substr(i, 2), 16); // ASCII Code Value
+        resultStr.push(String.fromCharCode(curCharCode));
+    }
+    return resultStr.join("");
+}
+
+// 二进制
+function stringToByte(str) {
+    let bytes = [];
+    let len, c;
+    len = str.length;
+    for (let i = 0; i < len; i++) {
+        c = str.charCodeAt(i);
+        if (c >= 0x010000 && c <= 0x10FFFF) {
+            bytes.push(((c >> 18) & 0x07) | 0xF0);
+            bytes.push(((c >> 12) & 0x3F) | 0x80);
+            bytes.push(((c >> 6) & 0x3F) | 0x80);
+            bytes.push((c & 0x3F) | 0x80);
+        } else if (c >= 0x000800 && c <= 0x00FFFF) {
+            bytes.push(((c >> 12) & 0x0F) | 0xE0);
+            bytes.push(((c >> 6) & 0x3F) | 0x80);
+            bytes.push((c & 0x3F) | 0x80);
+        } else if (c >= 0x000080 && c <= 0x0007FF) {
+            bytes.push(((c >> 6) & 0x1F) | 0xC0);
+            bytes.push((c & 0x3F) | 0x80);
+        } else {
+            bytes.push(c & 0xFF);
+        }
+    }
+    return bytes;
+}
+function byteToString(arr) {
+    if (typeof arr === 'string') {
+        return arr;
+    }
+    let str = '',
+        _arr = arr;
+    for (let i = 0; i < _arr.length; i++) {
+        let one = _arr[i].toString(2),
+            v = one.match(/^1+?(?=0)/);
+        if (v && one.length === 8) {
+            let bytesLength = v[0].length;
+            let store = _arr[i].toString(2).slice(7 - bytesLength);
+            for (let st = 1; st < bytesLength; st++) {
+                store += _arr[st + i].toString(2).slice(2);
+            }
+            str += String.fromCharCode(parseInt(store, 2));
+            i += bytesLength - 1;
+        } else {
+            str += String.fromCharCode(_arr[i]);
+        }
+    }
+    return str;
+}
+
+
 
 
 

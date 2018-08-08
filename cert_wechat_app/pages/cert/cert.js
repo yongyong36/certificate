@@ -44,7 +44,26 @@ Page({
       })
     } else {
       console.log("请重新登录");
+
     }
+  },
+  login: function() {
+    wx.login({
+      success: res => {
+        // console.log('app login', res)
+        wx.request({
+          url: this.globalData.serverName + '/storageCode',
+          method: "POST",
+          data: res,
+          success: function (res) {
+            // console.log('app storageCode', res);
+          },
+          fail: function (res) {
+            console.log(res)
+          }
+        })
+      }
+    })
   },
 
   /**
@@ -54,13 +73,14 @@ Page({
     // console.log(options)
     var _this = this;
     app.userInfoReadyCallback = function () {
-      _this.setData({
+      this.data.userInfo = app.globalData.userInfo,
+      this.setData({
         userInfo: app.globalData.userInfo,
         sensitiveUserData: app.globalData.sensitiveUserData,
         certId: options.certId
       })
+      console.log(app.globalData.userInfo, this.data.userInfo);
     }
-    console.log(this.data.userInfo);
     
     
   },

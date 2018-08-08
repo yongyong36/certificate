@@ -16,7 +16,7 @@ App({
           method: "POST",
           data: res,
           success: function(res) {
-            // console.log('app storageCode', res);
+            console.log('app storageCode', res);
           },
           fail: function(res) {
             console.log(res)

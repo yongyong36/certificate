@@ -12,7 +12,7 @@
       <input type="text" name="certMeaning" id="cert_bytes_meaning" value="傻证" v-model="certBytes.certMeaning"><br>
 
       <label for="cert_bytes_couple">cert_isCouple</label>
-      <select name="certCouple" id="cert_bytes_couple" v-model="certBytes.certCouple">
+      <select name="isCouple" id="cert_bytes_couple" v-model="certBytes.isCouple">
         <option value="true">是</option>
         <option value="false">否</option>
       </select><br>
@@ -288,7 +288,7 @@
       }
     ]
   ;
-  let contractAddress = "0x5426c464eaf9fd91dadc177b32ca84538db59f30";		// 合约地址
+  let contractAddress = "0xf267bbf9f70e907262d893139c35252ebd9fcf8a";		// 合约地址
   let myContract = web3.eth.contract(abi);
   let certContract = myContract.at(contractAddress);
 
@@ -363,7 +363,7 @@
           certId: 1,
           certName: 'aaaaa',
           certMeaning: '水电费',
-          certCouple: true,
+          isCouple: true,
           list: [],
           idList: [],
           nameList: [],
@@ -374,11 +374,11 @@
     // http: { headers: {'Content-Type': 'application/x-www-form-urlencoded'} },
     methods: {
       addCertBytes: function() {
-        console.log(this.certBytes.certName, this.certBytes.certMeaning, this.certBytes.certCouple);
+        console.log(this.certBytes.certName, this.certBytes.certMeaning, this.certBytes.isCouple);
         let data = {
           certName: this.certBytes.certName,
           certMeaning: this.certBytes.certMeaning,
-          certCouple: this.certBytes.certCouple,
+          isCouple: this.certBytes.isCouple,
         };
         unlockAccount().then(function () {
           console.log('unlock true'); //, certContract

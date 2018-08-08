@@ -4,4 +4,6 @@
 
   <button bindtap="checkSession">checkSession</button> 
   <button bindtap="getAppid">getAppid</button> 
+  
+  <button bindtap="login">login</button> 
 </view>

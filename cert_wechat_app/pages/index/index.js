@@ -21,6 +21,7 @@ Page({
     })
   },
   onLoad: function () {
+    wx.showNavigationBarLoading()
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,

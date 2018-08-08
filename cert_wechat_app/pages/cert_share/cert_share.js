@@ -23,7 +23,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var _this = this;
+    let _this = this;
     console.log('cert_share onLoad options', app.globalData.unionId, this.data.canIUse, options)
     this.setData({
       pageProps: options,

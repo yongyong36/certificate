@@ -1,5 +1,5 @@
-var fs = require("fs");
-var dirs = ['cert_wechat_app']
+let fs = require("fs");
+let dirs = ['cert_wechat_app'];
 dirs.forEach((dir) => {
   fs.readdir(dir + '/pages/', function (err, files) {
     files.forEach(function (file) {

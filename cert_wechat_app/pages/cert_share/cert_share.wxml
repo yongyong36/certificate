@@ -1,7 +1,12 @@
 <!--pages/cert_share/cert_share.wxml-->
 <view class="container">
+  <text class='title'>cert_share</text>
+
   <view class='block'>
-    <text class='title'>pages/cert_share/cert_share.wxml</text>
+    <text class='content' wx:if="{{oneself}}">分享此小程序向朋友发送【{{pageProps.certMeaning}}】证件匹配邀请</text>
+  </view>
+  <view class='block'>
+    <text class='content'>{{pageProps.invitedNickName}}向你发送【{{pageProps.certMeaning}}】证件匹配邀请</text><!-- wx:if="{{!oneself}}" -->
   </view>
 
   <view class='block'>

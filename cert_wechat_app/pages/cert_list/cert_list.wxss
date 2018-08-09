@@ -1,4 +1,1 @@
 /* pages/cert_list/cert_list.wxss */
-.title {
-  margin: 30px;
-}

@@ -284,7 +284,7 @@ let abi =
     ]
 ;
 
-let contractAddress = "0xf267bbf9f70e907262d893139c35252ebd9fcf8a";	    // 合约地址
+let contractAddress = "0xc39333236c9bcd4ace0a9bb0f9fa29272cf86222";	    // 合约地址
 let certContract = new web3.eth.Contract(abi,contractAddress, options);   //调用web3 去获取到合约的对象
 
 let unlockAccount = function () {
@@ -428,16 +428,22 @@ app.post("/getCertBytesList",function(req,resp){
 /* region wechat app api */
 let ssKey = {};
 app.post("/storageCode", function (req, resp) {
-    // console.log(req.body);
-    request('https://api.weixin.qq.com/sns/jscode2session?appid='+ appId + '&secret=' + appSecret + '&js_code=' + req.body.code + '&grant_type=authorization_code'
-        , function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            let bodyTmp = JSON.parse(body);
-            ssKey = {session_key: bodyTmp.session_key, openid: bodyTmp.openid, unionId: bodyTmp.unionId};
-            console.log('storageCode and get openid sskey unionid: ' + body);
-            resp.send({status: 'success', message: "storageCode success", unionId: bodyTmp.unionid});
-        }
-    })
+    console.log(req.body);
+    if (req.body.code) {
+        request('https://api.weixin.qq.com/sns/jscode2session?appid='+ appId + '&secret=' + appSecret + '&js_code=' + req.body.code + '&grant_type=authorization_code'
+            , function (error, response, body) {
+                console.log('storageCode ' + body);
+                if (!error && response.statusCode === 200) {
+                    let bodyObj = JSON.parse(body);
+                    ssKey = {session_key: bodyObj.session_key, openid: bodyObj.openid, unionId: bodyObj.unionId};
+                    resp.send({status: 'success', message: "storageCode success", unionId: bodyObj.unionid});
+                } else {
+                    resp.send({status: 'error', errorMsg: error});
+                }
+            })
+    } else {
+        resp.send({status: 'error', errorMsg: 'invalid code'});
+    }
 });
 // app.post("/getUnionId", function (req, resp) {
 //     // console.log(req.body);
@@ -466,7 +472,7 @@ app.post("/storageCode", function (req, resp) {
 
 
 app.post("/bindCert", function (req, resp) {
-    // console.log(req.body);
+    console.log(req.body);
     let result = {};
     
     

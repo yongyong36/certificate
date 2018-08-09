@@ -1,10 +1,10 @@
 <!--pages/cert_list/cert_list.wxml-->
 <view class="container">
-  <text class='title'>pages/cert_list/cert_list.wxml</text>
+  <text class='title'>cert_list</text>
 
   <view wx:for="{{certList}}" wx:key="unique" 
-         data-cert-id="{{item.certId}}" data-cert-name="{{item.certName}}" data-cert-meaning="{{item.certMeaning}}"
+         data-cert-id="{{item.certId}}" data-cert-name="{{item.certName}}" data-cert-meaning="{{item.certMeaning}}" data-is-couple="{{item.isCouple}}"
          bindtap='bindCert'>
-    <text>{{item.certId}} {{item.certName}} {{item.certMeaning}}</text>
+    <text>{{item.certId}} {{item.certName}} {{item.certMeaning}} {{item.isCouple}} </text>
   </view>
 </view>

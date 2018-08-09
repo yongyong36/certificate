@@ -33,19 +33,13 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 0,
 			"list": [
 				{
 					"id": 0,
 					"name": "分享页面",
 					"pathName": "pages/cert_share/cert_share",
-					"query": "certId=1&invitedId=oWeKrt1MCufz-oNG-zPlJRaZ7uo4"
-				},
-				{
-					"id": -1,
-					"name": "分享页面",
-					"pathName": "pages/cert/cert",
-					"query": "certId=1"
+					"query": "certId=1&certMeaning=水电费&invitedNickName=Yong&invitedUnionId=oWeKrt1MCufz-oNG-zPlJRaZ7uo4"
 				}
 			]
 		}

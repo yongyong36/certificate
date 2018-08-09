@@ -109,7 +109,11 @@ Page({
     console.log('cert onShareAppMessage', this.data)
     return {
       title: this.data.userInfo.nickName + '向你发出了一个婚礼猫'+ this.data.pageProps.certMeaning+'证领取邀请',
-      path: 'pages/cert_share/cert_share?certId=' + this.data.pageProps.certId + 'invitedId=' + this.data.unionId,
+      path: 'pages/cert_share/cert_share?' +
+      'certId=' + this.data.pageProps.certId +
+      'certMeaning=' + this.data.pageProps.certMeaning +
+      'invitedNickName=' + this.data.userInfo.nickName +
+      'invitedUnionId=' + this.data.unionId,
     }
   }
 })

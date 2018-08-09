@@ -15,3 +15,9 @@ button {
 .block {
   margin-bottom: 15rpx;
 }
+.title {
+  margin: 60rpx;
+}
+.content {
+  font-size: 30rpx;
+}

@@ -13,7 +13,8 @@ Page({
     wx.navigateTo({
       url: '../cert/cert?certId=' + event.currentTarget.dataset.certId 
         + '&certName=' + event.currentTarget.dataset.certName
-        + '&certMeaning=' + event.currentTarget.dataset.certMeaning,
+        + '&certMeaning=' + event.currentTarget.dataset.certMeaning
+        + '&isCouple=' + event.currentTarget.dataset.isCouple,
       success: function(res) {},
       fail: function(res) {},
       complete: function(res) {},

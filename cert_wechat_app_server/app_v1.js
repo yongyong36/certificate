@@ -289,7 +289,7 @@ let abi =
     ]
 ;
 
-let contractAddress = "0xf267bbf9f70e907262d893139c35252ebd9fcf8a";	    // 合约地址
+let contractAddress = "0xc39333236c9bcd4ace0a9bb0f9fa29272cf86222";	    // 合约地址
 let certContract = new web3.eth.Contract(abi,contractAddress, options);   //调用web3 去获取到合约的对象
 
 // let eth = new Eth(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));

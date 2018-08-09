@@ -36,29 +36,36 @@ App({
         let _this = this;
         wx.login({
             success: res => {
-                console.log('app login', res)
-                _this.getUnionId(res.code);
+                console.log('app login', res);
+                _this.globalData.appInfo = res;
+                _this.getUnionId();
             }
         })
     },
-    getUnionId: function(code) {    // 发送 res.code 到后台换取 openId, sessionKey, unionId
+    getUnionId: function() {    // 发送 res.code 到后台换取 openId, sessionKey, unionId
         let _this = this;
-        wx.request({
-            url: this.globalData.serverName + '/storageCode',
-            method: "POST",
-            data: {code: code},
-            success: function (res) {
-                console.log('app storageCode success', res.data);
-                _this.globalData.unionId = res.data.unionId;
-            },
-            fail: function (res) {
-                console.log('app storageCode fail', res)
-            }
-        })
+        if (this.globalData.unionId) {
+        
+        } else {
+            wx.request({
+                url: this.globalData.serverName + '/storageCode',
+                method: "POST",
+                data: {code: _this.globalData.appInfo.code},
+                success: function (res) {
+                    console.log('app storageCode success', res.data);
+                    _this.globalData.unionId = res.data.unionId;
+                    wx.setStorageSync('unionId', _this.globalData.unionId);
+                },
+                fail: function (res) {
+                    console.log('app storageCode fail', res)
+                }
+            })
+        }
     },
     globalData: {
         // serverName: 'http://127.0.0.1:3000',
         serverName: 'http://192.168.2.35:3000',
+        appInfo: null,
         userInfo: null,
         unionId: 0,
         // sensitiveUserData: null

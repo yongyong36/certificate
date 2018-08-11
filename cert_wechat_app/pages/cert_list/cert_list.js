@@ -35,17 +35,17 @@ Page({
   onReady: function () {
     var _this = this;
     wx.request({
-      url: this.data.serverName + '/getCertBytesList', //仅为示例，并非真实的接口地址
+      url: this.data.serverName + '/getCertList', //仅为示例，并非真实的接口地址
       header: {
         'content-type': 'application/json' // 默认值
       },
       method: 'POST',
       success: function (res) {
-        // console.log('cert_list /getCertBytesList res.data', res.data)
+        // console.log('cert_list /getCertList res.data', res.data)
         _this.setData({
-          certList: res.data.certBytesList
+          certList: res.data.CertList
         })
-        console.log('cert_list getCertBytesList certList', _this.data.certList);
+        console.log('cert_list getCertList certList', _this.data.certList);
       }
     })
   },

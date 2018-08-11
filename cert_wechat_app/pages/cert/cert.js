@@ -1,6 +1,6 @@
 // pages/cert/cert.js
 import Api from "../../api/api";
-var app = getApp();
+let app = getApp();
 Page({
 
   /**
@@ -54,7 +54,7 @@ Page({
     this.setData({
       pageProps: options,
       userInfo: app.globalData.userInfo,
-      unionId: app.globalData.unionId,
+      unionId: wx.getStorageSync('unionId'),
       // sensitiveUserData: app.globalData.sensitiveUserData,
       certId: options.certId
     })
@@ -113,7 +113,7 @@ Page({
       'certId=' + this.data.pageProps.certId +
       'certMeaning=' + this.data.pageProps.certMeaning +
       'invitedNickName=' + this.data.userInfo.nickName +
-      'invitedUnionId=' + this.data.unionId,
+      'inviterUnionId=' + this.data.unionId,
     }
   }
 })

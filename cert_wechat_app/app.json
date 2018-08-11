@@ -1,8 +1,8 @@
 {
   "pages":[
     "pages/cert_list/cert_list",
-    "pages/index/index",
     "pages/cert/cert",
+    "pages/index/index",
     "pages/cert_share/cert_share",
     "pages/logs/logs"
   ],

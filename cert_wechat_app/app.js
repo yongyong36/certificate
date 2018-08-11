@@ -52,9 +52,9 @@ App({
                 method: "POST",
                 data: {code: _this.globalData.appInfo.code},
                 success: function (res) {
-                    console.log('app storageCode success', res.data);
                     _this.globalData.unionId = res.data.unionId;
                     wx.setStorageSync('unionId', _this.globalData.unionId);
+                    console.log('app storageCode success', res.data, _this.globalData.unionId);
                 },
                 fail: function (res) {
                     console.log('app storageCode fail', res)

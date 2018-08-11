@@ -6,13 +6,13 @@
     <div class="col">
       <h3>set cert bytes</h3>
       <label for="cert_bytes_name">cert_name</label>
-      <input type="text" name="certName" id="cert_bytes_name" value="silly" v-model="certBytes.certName"><br>
+      <input type="text" name="certName" id="cert_bytes_name" value="silly" v-model="cert.certName"><br>
 
       <label for="cert_bytes_meaning">cert_meaning</label>
-      <input type="text" name="certMeaning" id="cert_bytes_meaning" value="傻证" v-model="certBytes.certMeaning"><br>
+      <input type="text" name="certMeaning" id="cert_bytes_meaning" value="傻证" v-model="cert.certMeaning"><br>
 
       <label></label>
-      <button @click="addCertBytes()">addCertBytes</button>
+      <button @click="addCert()">addCert</button>
     </div>
     <br>
     <br>
@@ -23,17 +23,17 @@
     <hr>
     <div>
       <h3>get cert bytes</h3>
-      <button @click="getCertBytesIdList()">getCertIdList</button>
+      <button @click="getCertIdList()">getCertIdList</button>
       <br>
-      <button @click="getCertBytesList()">getCertBytesList</button>
+      <button @click="getCertList()">getCertList</button>
       <br>
 
       <div>
-        <button @click="getCertBytes(certBytes.getById)">getCertBytes</button>
-        <input type="text" v-model="certBytes.getById">
+        <button @click="getCert(cert.getById)">getCert</button>
+        <input type="text" v-model="cert.getById">
       </div>
       <ul>
-        <li v-for="cert in certBytes.list">
+        <li v-for="cert in cert.list">
           {{cert}}
         </li>
       </ul>
@@ -61,90 +61,13 @@
   let abi =
     [
       {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_certName",
-            "type": "string"
-          },
-          {
-            "name": "_certMeaning",
-            "type": "string"
-          }
-        ],
-        "name": "addCert",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_certId",
-            "type": "uint256"
-          },
-          {
-            "name": "_inviterId",
-            "type": "uint256"
-          },
-          {
-            "name": "_invitedId",
-            "type": "uint256"
-          },
-          {
-            "name": "_bindTime",
-            "type": "uint256"
-          }
-        ],
-        "name": "addCertBind",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_certName",
-            "type": "bytes"
-          },
-          {
-            "name": "_certMeaning",
-            "type": "bytes"
-          }
-        ],
-        "name": "addCertBytes",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-      },
-      {
         "constant": true,
-        "inputs": [
-          {
-            "name": "_id",
-            "type": "uint256"
-          }
-        ],
-        "name": "getCert",
+        "inputs": [],
+        "name": "minter",
         "outputs": [
           {
             "name": "",
-            "type": "string"
-          },
-          {
-            "name": "",
-            "type": "string"
+            "type": "address"
           }
         ],
         "payable": false,
@@ -186,6 +109,95 @@
         "constant": true,
         "inputs": [
           {
+            "name": "_id",
+            "type": "uint256"
+          }
+        ],
+        "name": "getCert",
+        "outputs": [
+          {
+            "name": "",
+            "type": "bytes"
+          },
+          {
+            "name": "",
+            "type": "bytes"
+          },
+          {
+            "name": "",
+            "type": "bytes"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_certId",
+            "type": "uint256"
+          },
+          {
+            "name": "_inviterId",
+            "type": "uint256"
+          },
+          {
+            "name": "_invitedId",
+            "type": "uint256"
+          },
+          {
+            "name": "_bindTime",
+            "type": "uint256"
+          }
+        ],
+        "name": "addCertBind",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "getCertIdList",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256[]"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_certName",
+            "type": "bytes"
+          },
+          {
+            "name": "_certMeaning",
+            "type": "bytes"
+          },
+          {
+            "name": "_isCouple",
+            "type": "bytes"
+          }
+        ],
+        "name": "addCert",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
             "name": "_inviterId",
             "type": "uint256"
           }
@@ -214,73 +226,14 @@
         "type": "function"
       },
       {
-        "constant": true,
-        "inputs": [
-          {
-            "name": "_id",
-            "type": "uint256"
-          }
-        ],
-        "name": "getCertBytes",
-        "outputs": [
-          {
-            "name": "",
-            "type": "bytes"
-          },
-          {
-            "name": "",
-            "type": "bytes"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
         "inputs": [],
-        "name": "getCertBytesIdList",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256[]"
-          }
-        ],
         "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "getCertIdList",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256[]"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "minter",
-        "outputs": [
-          {
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        "stateMutability": "nonpayable",
+        "type": "constructor"
       }
     ]
   ;
-  let contractAddress = "0xc39333236c9bcd4ace0a9bb0f9fa29272cf86222";		// 合约地址
+  let contractAddress = "0x196669e9e6af48e3375bfa22cc51f140d301d5e5";		// 合约地址
   let myContract = web3.eth.contract(abi);
   let certContract = myContract.at(contractAddress);
 

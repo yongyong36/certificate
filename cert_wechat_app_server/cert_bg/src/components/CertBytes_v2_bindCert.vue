@@ -1,24 +1,24 @@
 <template>
   <div>
     <!-- Cert Form -->
-    <h1>Cert Form —— certBytes_v2_bindCert</h1>
+    <h1>Cert Form —— Cert_v2_bindCert</h1>
 
     <div class="col">
       <h3>set cert bytes</h3>
       <label for="cert_bytes_name">cert_name</label>
-      <input type="text" name="certName" id="cert_bytes_name" value="silly" v-model="certBytes.certName"><br>
+      <input type="text" name="certName" id="cert_bytes_name" value="silly" v-model="cert.certName"><br>
 
       <label for="cert_bytes_meaning">cert_meaning</label>
-      <input type="text" name="certMeaning" id="cert_bytes_meaning" value="傻证" v-model="certBytes.certMeaning"><br>
+      <input type="text" name="certMeaning" id="cert_bytes_meaning" value="傻证" v-model="cert.certMeaning"><br>
 
       <label for="cert_bytes_couple">cert_isCouple</label>
-      <select name="isCouple" id="cert_bytes_couple" v-model="certBytes.isCouple">
+      <select name="isCouple" id="cert_bytes_couple" v-model="cert.isCouple">
         <option value="true">是</option>
         <option value="false">否</option>
       </select><br>
 
       <label></label>
-      <button @click="addCertBytes()">addCertBytes</button>
+      <button @click="addCert()">addCert</button>
     </div>
     <br>
     <br>
@@ -29,17 +29,17 @@
     <hr>
     <div>
       <h3>get cert bytes</h3>
-      <button @click="getCertBytesIdList()">getCertIdList</button>
+      <button @click="getCertIdList()">getCertIdList</button>
       <br>
-      <button @click="getCertBytesList()">getCertBytesList</button>
+      <button @click="getCertList()">getCertList</button>
       <br>
 
       <div>
-        <button @click="getCertBytes(certBytes.getById)">getCertBytes</button>
-        <input type="text" v-model="certBytes.getById">
+        <button @click="getCert(cert.getById)">getCert</button>
+        <input type="text" v-model="cert.getById">
       </div>
       <ul>
-        <li v-for="cert in certBytes.list" :onclick="bindCert(cert.certId)">
+        <li v-for="cert in cert.list" :onclick="bindCert(cert.certId)">
           {{cert}}
         </li>
       </ul>
@@ -61,94 +61,13 @@
   let abi =
     [
       {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_certName",
-            "type": "string"
-          },
-          {
-            "name": "_certMeaning",
-            "type": "string"
-          }
-        ],
-        "name": "addCert",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_certId",
-            "type": "uint256"
-          },
-          {
-            "name": "_inviterId",
-            "type": "uint256"
-          },
-          {
-            "name": "_invitedId",
-            "type": "uint256"
-          },
-          {
-            "name": "_bindTime",
-            "type": "uint256"
-          }
-        ],
-        "name": "addCertBind",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "constant": false,
-        "inputs": [
-          {
-            "name": "_certName",
-            "type": "bytes"
-          },
-          {
-            "name": "_certMeaning",
-            "type": "bytes"
-          },
-          {
-            "name": "_isCouple",
-            "type": "bytes"
-          }
-        ],
-        "name": "addCertBytes",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-      },
-      {
         "constant": true,
-        "inputs": [
-          {
-            "name": "_id",
-            "type": "uint256"
-          }
-        ],
-        "name": "getCert",
+        "inputs": [],
+        "name": "minter",
         "outputs": [
           {
             "name": "",
-            "type": "string"
-          },
-          {
-            "name": "",
-            "type": "string"
+            "type": "address"
           }
         ],
         "payable": false,
@@ -190,6 +109,95 @@
         "constant": true,
         "inputs": [
           {
+            "name": "_id",
+            "type": "uint256"
+          }
+        ],
+        "name": "getCert",
+        "outputs": [
+          {
+            "name": "",
+            "type": "bytes"
+          },
+          {
+            "name": "",
+            "type": "bytes"
+          },
+          {
+            "name": "",
+            "type": "bytes"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_certId",
+            "type": "uint256"
+          },
+          {
+            "name": "_inviterId",
+            "type": "uint256"
+          },
+          {
+            "name": "_invitedId",
+            "type": "uint256"
+          },
+          {
+            "name": "_bindTime",
+            "type": "uint256"
+          }
+        ],
+        "name": "addCertBind",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "getCertIdList",
+        "outputs": [
+          {
+            "name": "",
+            "type": "uint256[]"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_certName",
+            "type": "bytes"
+          },
+          {
+            "name": "_certMeaning",
+            "type": "bytes"
+          },
+          {
+            "name": "_isCouple",
+            "type": "bytes"
+          }
+        ],
+        "name": "addCert",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [
+          {
             "name": "_inviterId",
             "type": "uint256"
           }
@@ -218,77 +226,14 @@
         "type": "function"
       },
       {
-        "constant": true,
-        "inputs": [
-          {
-            "name": "_id",
-            "type": "uint256"
-          }
-        ],
-        "name": "getCertBytes",
-        "outputs": [
-          {
-            "name": "",
-            "type": "bytes"
-          },
-          {
-            "name": "",
-            "type": "bytes"
-          },
-          {
-            "name": "",
-            "type": "bytes"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
         "inputs": [],
-        "name": "getCertBytesIdList",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256[]"
-          }
-        ],
         "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "getCertIdList",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256[]"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "constant": true,
-        "inputs": [],
-        "name": "minter",
-        "outputs": [
-          {
-            "name": "",
-            "type": "address"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
+        "stateMutability": "nonpayable",
+        "type": "constructor"
       }
     ]
   ;
-  let contractAddress = "0xc39333236c9bcd4ace0a9bb0f9fa29272cf86222";		// 合约地址
+  let contractAddress = "0x196669e9e6af48e3375bfa22cc51f140d301d5e5";		// 合约地址
   let myContract = web3.eth.contract(abi);
   let certContract = myContract.at(contractAddress);
 
@@ -356,10 +301,10 @@
   import Vue from 'vue';
 
   export default {
-    name: 'CertBytes',
+    name: 'Cert',
     data () {
       return {
-        certBytes: {
+        cert: {
           certId: 1,
           certName: 'dog',
           certMeaning: '狗牌',
@@ -373,16 +318,16 @@
     },
     // http: { headers: {'Content-Type': 'application/x-www-form-urlencoded'} },
     methods: {
-      addCertBytes: function() {
-        console.log(this.certBytes.certName, this.certBytes.certMeaning, this.certBytes.isCouple);
+      addCert: function() {
+        console.log(this.cert.certName, this.cert.certMeaning, this.cert.isCouple);
         let data = {
-          certName: this.certBytes.certName,
-          certMeaning: this.certBytes.certMeaning,
-          isCouple: this.certBytes.isCouple,
+          certName: this.cert.certName,
+          certMeaning: this.cert.certMeaning,
+          isCouple: this.cert.isCouple,
         };
         unlockAccount().then(function () {
           console.log('unlock true'); //, certContract
-          Vue.http.post('http://127.0.0.1:3000/addCertBytes', data)
+          Vue.http.post('http://127.0.0.1:3000/addCert', data)
             .then((resp) => {
               console.log(resp.data);
             },(err) => {
@@ -390,18 +335,18 @@
             })
         })
       },
-      getCertBytesIdList: function() {
+      getCertIdList: function() {
         let _this = this;
-        Vue.http.get('http://127.0.0.1:3000/getCertBytesIdList')
+        Vue.http.get('http://127.0.0.1:3000/getCertIdList')
           .then((resp) => {
-            _this.certBytes.idList = resp.data;
+            _this.cert.idList = resp.data;
             let listTemp = [];
-            _this.certBytes.idList.forEach(function (item, index) {
-              _this.getCertBytes(item).then(function (data) {
+            _this.cert.idList.forEach(function (item, index) {
+              _this.getCert(item).then(function (data) {
                 // console.info('then', data);
                 listTemp.push(data);
-                if (_this.certBytes.idList.length === listTemp.length) {
-                  _this.certBytes.list = listTemp.sort(compareByCertId('certId'));
+                if (_this.cert.idList.length === listTemp.length) {
+                  _this.cert.list = listTemp.sort(compareByCertId('certId'));
                 }
               });
             });
@@ -410,13 +355,13 @@
             console.log(err);
           })
       },
-      getCertBytes: function(id) {
+      getCert: function(id) {
         let _this = this;
         let data = {
           certId: id,
         };
         let promise = new Promise(function (resolve, reject) {
-          Vue.http.post('http://127.0.0.1:3000/getCertBytes', data)
+          Vue.http.post('http://127.0.0.1:3000/getCert', data)
             .then((resp) => {
               console.log(resp.data.certObj);
               resolve(resp.data.certObj);
@@ -428,12 +373,12 @@
         });
         return promise;
       },
-      getCertBytesList: function(id) {
+      getCertList: function(id) {
         let _this = this;
-        Vue.http.post('http://127.0.0.1:3000/getCertBytesList')
+        Vue.http.post('http://127.0.0.1:3000/getCertList')
           .then((resp) => {
-            _this.certBytes.list = resp.data.certBytesList;
-            console.log(resp.data.certBytesList);
+            _this.cert.list = resp.data.CertList;
+            console.log(resp.data.CertList);
           },(err) => {
             console.log(err);
           });

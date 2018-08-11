@@ -14,11 +14,24 @@ Page({
     },
     getBindData: function () {
         console.log('cert_share getBindData', this.data);
-        wx.request({
-            url: this.data.serverName + '/bindCert',
-            method: 'POST',
-            
-        })
+        if(!this.data.oneself) {
+            wx.request({
+                url: this.data.serverName + '/bindCert',
+                method: 'POST',
+                data: {
+                    inviterUnionId: this.data.pageProps.inviterUnionId,
+                    invitedUnionId: this.data.unionId,
+                    certId: this.data.pageProps.certId,
+                    isCouple: this.data.pageProps.isCouple,
+                },
+                success: function (res) {
+                    console.log(res.data);
+                },
+                fail: function (err) {
+                    console.log(err);
+                }
+            })
+        }
     },
     
     /**
@@ -30,7 +43,7 @@ Page({
             pageProps: options,
             unionId: wx.getStorageSync('unionId'),
         });
-        if (this.data.unionId === this.data.pageProps.invitedUnionId) {
+        if (this.data.unionId === this.data.pageProps.inviterUnionId) {
             // 邀请者本人
             this.setData({
                 oneself: true,

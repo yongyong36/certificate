@@ -10,8 +10,10 @@ let getSensitiveData = require('./controller/getWechatAppIdController');
 
 // let appId = "wx0e88c5996198a2f4";    // 此appid无法获取unionID
 // let appSecret = "2e9a2be7fd9c54222a5a7bde94ac1e89";
-let appId = "wxc1d05bb93e18391d";
-let appSecret = "1f2fab3c591b6e8fe1006aa49c15c00c";
+// let appId = "wxc1d05bb93e18391d";
+// let appSecret = "1f2fab3c591b6e8fe1006aa49c15c00c";
+let appId = "wxacb6878e1fe540cd";   //共享相册小程序
+let appSecret = "cda84abc14f382caac4b27e55b63d338";
 
 let app = express();
 // app.configure(function () {
@@ -371,6 +373,11 @@ app.post("/getCertList",function(req,resp){
 
 
 /* region wechat app api */
+/**
+ * request: code
+ * response: session_key, openid, unionId（如果有的话）
+ *
+ */
 let ssKey = {};
 app.post("/storageCode", function (req, resp) {
     console.log(req.body);
@@ -394,7 +401,7 @@ app.post("/storageCode", function (req, resp) {
                     } else {
                         ssKey = {session_key: bodyObj.session_key, openid: bodyObj.openid, unionId: bodyObj.unionId};
                         console.log('storageCode success', bodyObj.unionid);
-                        resp.send({status: 'success', message: "storageCode success", unionId: bodyObj.unionid});
+                        resp.send({status: 'success', message: "storageCode success", loginData: ssKey});
                     }
                 } else {
                     resp.send({status: 'error', message: error});
@@ -404,6 +411,12 @@ app.post("/storageCode", function (req, resp) {
         resp.send({status: 'error', message: 'invalid code'});
     }
 });
+
+/**
+ * request: encryptedData, iv
+ * need data: appId， session_key
+ * response: unionId（也可 sensitiveData）
+ */
 app.post("/getUnionId", function (req, resp) {
     // console.log(req.body);
     let result = {};
